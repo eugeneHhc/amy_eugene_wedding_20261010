@@ -242,32 +242,5 @@
             </iframe>
         </section>
     </main>
-
-    <script>
-        const SECURE_TOKEN = "Napa2026"; // Assign your custom security passkey value here
-        const gate = document.getElementById('gateway');
-        const form = document.getElementById('gate-form');
-        const input = document.getElementById('passkey');
-        const error = document.getElementById('error-msg');
-
-        // Check verification loop state immediately on document mount
-        if (sessionStorage.getItem("wedding_auth_verified") !== "true") {
-            gate.showModal();
-            
-            form.addEventListener('submit', (e) => {
-                e.preventDefault();
-                if (input.value.trim() === SECURE_TOKEN) {
-                    sessionStorage.setItem("wedding_auth_verified", "true");
-                    gate.close();
-                } else {
-                    error.textContent = "Passcode unrecognized. Please recheck your invitation card.";
-                    input.value = "";
-                    input.focus();
-                }
-            });
-        } else {
-            gate.close();
-        }
-    </script>
 </body>
 </html>
