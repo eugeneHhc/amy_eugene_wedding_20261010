@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <meta name="robots" content="noindex, nofollow">
+    
+    <title>Our Wedding Celebration</title>
+    
+    <style>
+        /* Modern CSS Variables & Reset */
+        :root {
+            --font-sans: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            --bg-color: #fcfbfa;
+            --text-main: #2d3748;
+            --text-muted: #718096;
+            --accent: #8a7a6e;
+            --accent-light: #e2dcd5;
+            --card-shadow: 0 20px 40px rgba(0, 0, 0, 0.04);
+            --radius: 16px;
+        }
+
+        *, *::before, *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: var(--font-sans);
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            line-height: 1.6;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        /* Native CSS Nesting (Modern Standard Layout) */
+        .wrapper {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: max(2rem, 4vw);
+
+            header {
+                text-align: center;
+                margin-bottom: clamp(3rem, 8vw, 6rem);
+
+                h1 {
+                    font-size: clamp(2.5rem, 6vw, 4.5rem);
+                    font-weight: 200;
+                    letter-spacing: 4px;
+                    color: var(--accent);
+                    margin-bottom: 1.5rem;
+                    text-transform: uppercase;
+                }
+
+                .meta-info {
+                    font-size: clamp(1.1rem, 2vw, 1.3rem);
+                    color: var(--text-muted);
+                    font-weight: 300;
+                    letter-spacing: 1px;
+                    
+                    b {
+                        color: var(--text-main);
+                        font-weight: 500;
+                    }
+                }
+            }
+        }
+
+        /* Fluid Responsive Photo Grid */
+        .gallery-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 24px;
+            margin-bottom: clamp(3rem, 8vw, 6rem);
+
+            .photo-frame {
+                overflow: hidden;
+                border-radius: var(--radius);
+                box-shadow: var(--card-shadow);
+                aspect-ratio: 4 / 5;
+
+                img {
+                    width: 100%;
+                    height: 100%;
+                    object-fit: cover;
+                    transition: transform 0.8s cubic-bezier(0.25, 1, 0.5, 1);
+
+                    &:hover {
+                        transform: scale(1.04);
+                    }
+                }
+            }
+        }
+
+        /* Clean RSVP Form Wrapper Layout */
+        .rsvp-container {
+            background: #ffffff;
+            border-radius: var(--radius);
+            box-shadow: var(--card-shadow);
+            padding: 1rem;
+            border: 1px solid rgba(0,0,0,0.02);
+            position: relative;
+            
+            iframe {
+                width: 100%;
+                border: none;
+                border-radius: calc(var(--radius) - 4px);
+                display: block;
+            }
+        }
+
+        /* Native Dialog Password Gate with Glassmorphism Backdrop */
+        dialog#gateway {
+            border: none;
+            width: 100vw;
+            height: 100vh;
+            max-width: 100%;
+            max-height: 100%;
+            background: rgba(252, 251, 250, 0.85);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            .gate-card {
+                background: #ffffff;
+                padding: 3rem 2.5rem;
+                border-radius: var(--radius);
+                box-shadow: 0 30px 60px rgba(0,0,0,0.1);
+                text-align: center;
+                max-width: 420px;
+                width: 90%;
+
+                h2 {
+                    font-weight: 300;
+                    letter-spacing: 2px;
+                    margin-bottom: 1rem;
+                    color: var(--accent);
+                }
+
+                p {
+                    font-size: 0.95rem;
+                    color: var(--text-muted);
+                    margin-bottom: 2rem;
+                }
+
+                input[type="password"] {
+                    width: 100%;
+                    padding: 14px;
+                    border: 1px solid var(--accent-light);
+                    border-radius: 8px;
+                    font-size: 1rem;
+                    text-align: center;
+                    outline: none;
+                    transition: border-color 0.3s;
+                    margin-bottom: 1rem;
+
+                    &:focus {
+                        border-color: var(--accent);
+                    }
+                }
+
+                button {
+                    width: 100%;
+                    padding: 14px;
+                    background: var(--accent);
+                    color: white;
+                    border: none;
+                    border-radius: 8px;
+                    font-size: 1rem;
+                    font-weight: 500;
+                    cursor: pointer;
+                    letter-spacing: 1px;
+                    transition: opacity 0.3s;
+
+                    &:hover {
+                        opacity: 0.9;
+                    }
+                }
+
+                .error-txt {
+                    color: #e53e3e;
+                    font-size: 0.85rem;
+                    margin-top: 1rem;
+                    min-height: 20px;
+                }
+            }
+        }
+
+        /* Prevent background layout interactions when gate is locked */
+        body:has(dialog[open]) .wrapper {
+            pointer-events: none;
+            filter: blur(4px);
+        }
+    </style>
+</head>
+<body>
+
+    <dialog id="gateway">
+        <div class="gate-card">
+            <h2>Welcome</h2>
+            <p>Please enter the exclusive guest passcode found on your wedding invitation to unlock our website.</p>
+            <form id="gate-form">
+                <input type="password" id="passkey" placeholder="Enter Passcode" required autocomplete="off">
+                <button type="submit">Unlock Invitation</button>
+                <div id="error-msg" class="error-txt"></div>
+            </form>
+        </div>
+    </dialog>
+
+    <main class="wrapper">
+        <header>
+            <h1>Julian & Sophia</h1>
+            <p class="meta-info">
+                <b>Saturday, September 12, 2026</b><br>
+                Ceremony begins at 4:30 PM &bull; Reception to follow<br>
+                The Glasshouse Estate, Napa Valley
+            </p>
+        </header>
+
+        <section class="gallery-grid">
+            <div class="photo-frame">
+                <img src="https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&w=800&q=85" alt="Pre-wedding Moment 1" loading="lazy">
+            </div>
+            <div class="photo-frame">
+                <img src="https://images.unsplash.com/photo-1511285560929-80b456fea0bc?auto=format&fit=crop&w=800&q=85" alt="Pre-wedding Moment 2" loading="lazy">
+            </div>
+            <div class="photo-frame">
+                <img src="https://images.unsplash.com/photo-1583939003579-730e3918a45a?auto=format&fit=crop&w=800&q=85" alt="Pre-wedding Moment 3" loading="lazy">
+            </div>
+        </section>
+
+        <section class="rsvp-container">
+            <iframe 
+                src="https://docs.google.com/forms/d/e/1FAIpQLSf0yROc5FfPcvex7G3e1uPGXo3nmQMk99EKZypuarafcVtwhw/viewform?embedded=true" 
+                height="900" 
+                loading="lazy">
+                Loading RSVP Form View Engine...
+            </iframe>
+        </section>
+    </main>
+
+    <script>
+        const SECURE_TOKEN = "Napa2026"; // Assign your custom security passkey value here
+        const gate = document.getElementById('gateway');
+        const form = document.getElementById('gate-form');
+        const input = document.getElementById('passkey');
+        const error = document.getElementById('error-msg');
+
+        // Check verification loop state immediately on document mount
+        if (sessionStorage.getItem("wedding_auth_verified") !== "true") {
+            gate.showModal();
+            
+            form.addEventListener('submit', (e) => {
+                e.preventDefault();
+                if (input.value.trim() === SECURE_TOKEN) {
+                    sessionStorage.setItem("wedding_auth_verified", "true");
+                    gate.close();
+                } else {
+                    error.textContent = "Passcode unrecognized. Please recheck your invitation card.";
+                    input.value = "";
+                    input.focus();
+                }
+            });
+        } else {
+            gate.close();
+        }
+    </script>
+</body>
+</html>
