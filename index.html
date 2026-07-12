@@ -94,7 +94,7 @@
             }
         }
 
-        /* Clean RSVP Form Wrapper Layout */
+        /* Clean RSVP / Guest Messages Wrapper Layout */
         .rsvp-container {
             background: #ffffff;
             border-radius: var(--radius);
@@ -102,12 +102,27 @@
             padding: 1rem;
             border: 1px solid rgba(0,0,0,0.02);
             position: relative;
+            text-align: center;
+            padding: 28px;
+            margin-bottom: clamp(2rem, 6vw, 3rem);
             
             iframe {
                 width: 100%;
                 border: none;
                 border-radius: calc(var(--radius) - 4px);
                 display: block;
+            }
+
+            h2 {
+                margin-bottom: 8px;
+                font-size: 1.6rem;
+                color: var(--accent);
+                font-weight: 300;
+            }
+
+            p.lead {
+                margin-bottom: 16px;
+                color: var(--text-muted);
             }
         }
 
@@ -220,12 +235,21 @@
             </div>
         </section>
 
-        <section class="rsvp-container">
+        <section id="guest-messages" class="rsvp-container">
+            <h2>Leave a congratulations message</h2>
+            <p class="lead">Share a short message for the newlyweds — your kind words will be treasured.</p>
+
+            <!--
+              NOTE: This iframe currently points to the site's existing Google Form embed.
+              If you have a dedicated "congratulations" Google Form, replace the src URL below
+              with the embed link from the form's Send → Embed option.
+            -->
             <iframe 
                 src="https://docs.google.com/forms/d/e/1FAIpQLSf0yROc5FfPcvex7G3e1uPGXo3nmQMk99EKZypuarafcVtwhw/viewform?embedded=true" 
-                height="900" 
-                loading="lazy">
-                Loading RSVP Form View Engine...
+                height="700" 
+                loading="lazy" 
+                title="Guest congratulations form">
+                Loading Guest Messages Form...
             </iframe>
         </section>
     </main>
