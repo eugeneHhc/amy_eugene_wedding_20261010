@@ -128,8 +128,9 @@
 
         /* Guest messages UI */
         .guest-form {
+            /* Make the textarea occupy the full section width and place the button below it */
             display: grid;
-            grid-template-columns: 1fr auto;
+            grid-template-columns: 1fr;
             gap: 12px;
             align-items: start;
             margin-top: 12px;
@@ -137,7 +138,9 @@
 
         textarea#gmsg {
             width: 100%;
-            min-height: 120px;
+            /* Increase the visible area but keep it bounded by viewport to avoid overflowing the section */
+            min-height: 220px;
+            max-height: min(60vh, 420px);
             resize: vertical;
             padding: 12px;
             border-radius: 10px;
@@ -156,6 +159,7 @@
             cursor: pointer;
             font-weight: 600;
             white-space: nowrap;
+            justify-self: start; /* keep the button aligned to the left of the form */
         }
 
         .messages {
@@ -297,8 +301,7 @@
 
             <!-- Replaced Google Form embed with a lightweight, local guest message textarea. -->
             <form id="guestForm" class="guest-form" action="#" method="post" novalidate>
-                <label for="gmsg" class="sr-only">Guest message</label>
-                <textarea id="gmsg" name="message" placeholder="Write your message here..." maxlength="1000" required aria-label="Guest message"></textarea>
+                <textarea id="gmsg" name="message" placeholder="Write your message here..." maxlength="1000" required aria-label="Message for newlyweds"></textarea>
                 <div>
                     <button id="send" type="submit">Send</button>
                 </div>
