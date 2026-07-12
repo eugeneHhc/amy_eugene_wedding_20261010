@@ -126,6 +126,62 @@
             }
         }
 
+        /* Guest messages UI */
+        .guest-form {
+            display: grid;
+            grid-template-columns: 1fr auto;
+            gap: 12px;
+            align-items: start;
+            margin-top: 12px;
+        }
+
+        textarea#gmsg {
+            width: 100%;
+            min-height: 120px;
+            resize: vertical;
+            padding: 12px;
+            border-radius: 10px;
+            border: 1px solid var(--accent-light);
+            font-size: 1rem;
+            color: var(--text-main);
+            outline: none;
+        }
+
+        button#send {
+            background: var(--accent);
+            color: white;
+            border: none;
+            padding: 12px 18px;
+            border-radius: 10px;
+            cursor: pointer;
+            font-weight: 600;
+            white-space: nowrap;
+        }
+
+        .messages {
+            margin-top: 20px;
+            text-align: left;
+            display: grid;
+            gap: 12px;
+        }
+
+        .message {
+            background: linear-gradient(180deg, #fff 0%, #fbfaf9 100%);
+            border-radius: 12px;
+            padding: 12px 14px;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.04);
+            border: 1px solid rgba(0,0,0,0.02);
+            font-size: 0.98rem;
+            color: var(--text-main);
+        }
+
+        .message time {
+            display: block;
+            margin-top: 8px;
+            font-size: 0.85rem;
+            color: var(--text-muted);
+        }
+
         /* Native Dialog Password Gate with Glassmorphism Backdrop */
         dialog#gateway {
             border: none;
@@ -239,19 +295,125 @@
             <h2>Leave a congratulations message</h2>
             <p class="lead">Share a short message for the newlyweds — your kind words will be treasured.</p>
 
-            <!--
-              NOTE: This iframe currently points to the site's existing Google Form embed.
-              If you have a dedicated "congratulations" Google Form, replace the src URL below
-              with the embed link from the form's Send → Embed option.
-            -->
-            <iframe 
-                src="https://docs.google.com/forms/d/e/1FAIpQLSf0yROc5FfPcvex7G3e1uPGXo3nmQMk99EKZypuarafcVtwhw/viewform?embedded=true" 
-                height="700" 
-                loading="lazy" 
-                title="Guest congratulations form">
-                Loading Guest Messages Form...
-            </iframe>
+            <!-- Replaced Google Form embed with a lightweight, local guest message textarea. -->
+            <form id="guestForm" class="guest-form" action="#" method="post" novalidate>
+                <label for="gmsg" class="sr-only">Guest message</label>
+                <textarea id="gmsg" name="message" placeholder="Write your message here..." maxlength="1000" required aria-label="Guest message"></textarea>
+                <div>
+                    <button id="send" type="submit">Send</button>
+                </div>
+            </form>
+
+            <div class="messages" id="messages" aria-live="polite" aria-atomic="true"></div>
         </section>
     </main>
+
+    <script>
+        // Lightweight in-memory + localStorage messages.
+        // Performance goals: minimal DOM updates, simple append-only rendering, no external libraries.
+        (function () {
+            var form = document.getElementById('guestForm');
+            var textarea = document.getElementById('gmsg');
+            var list = document.getElementById('messages');
+            var STORAGE_KEY = 'guest_messages_v1';
+
+            // Load existing messages from localStorage (fast, synchronous, small payloads)
+            var messages = [];
+            try {
+                var raw = localStorage.getItem(STORAGE_KEY);
+                if (raw) messages = JSON.parse(raw);
+            } catch (e) {
+                // If parsing fails, clear storage entry to avoid repeated errors.
+                console.warn('Failed to read guest messages from localStorage', e);
+                try { localStorage.removeItem(STORAGE_KEY); } catch (ignored) {}
+                messages = [];
+            }
+
+            // Helper: create message DOM node and append
+            function appendMessage(msg) {
+                var wrapper = document.createElement('div');
+                wrapper.className = 'message';
+
+                var text = document.createElement('div');
+                text.textContent = msg.text;
+                wrapper.appendChild(text);
+
+                var time = document.createElement('time');
+                time.textContent = new Date(msg.ts).toLocaleString();
+                wrapper.appendChild(time);
+
+                // Append at end. Using appendChild is fast and avoids reflow of entire list.
+                list.appendChild(wrapper);
+            }
+
+            // Render initial messages (append only)
+            (function renderInitial() {
+                if (!messages || !messages.length) return;
+                // Create a document fragment to minimize reflows
+                var frag = document.createDocumentFragment();
+                for (var i = 0; i < messages.length; i++) {
+                    var msg = messages[i];
+                    var wrapper = document.createElement('div');
+                    wrapper.className = 'message';
+
+                    var text = document.createElement('div');
+                    text.textContent = msg.text;
+                    wrapper.appendChild(text);
+
+                    var time = document.createElement('time');
+                    time.textContent = new Date(msg.ts).toLocaleString();
+                    wrapper.appendChild(time);
+
+                    frag.appendChild(wrapper);
+                }
+                list.appendChild(frag);
+            })();
+
+            // Persist messages to localStorage (debounced to avoid excessive writes)
+            var saveTimer = null;
+            function persist() {
+                if (saveTimer) return; // simple throttle: at most once per event loop tick
+                saveTimer = setTimeout(function () {
+                    saveTimer = null;
+                    try {
+                        localStorage.setItem(STORAGE_KEY, JSON.stringify(messages));
+                    } catch (e) {
+                        // Storage quota exceeded? silently fail; messages remain in-memory for this session.
+                        console.warn('Failed to persist guest messages', e);
+                    }
+                }, 0);
+            }
+
+            form.addEventListener('submit', function (ev) {
+                ev.preventDefault();
+                var text = textarea.value.trim();
+                if (!text) return;
+
+                // Create message object
+                var msg = { text: text, ts: Date.now() };
+
+                // Append to in-memory array
+                messages.push(msg);
+
+                // Append to DOM immediately (fast path)
+                appendMessage(msg);
+
+                // Persist asynchronously
+                persist();
+
+                // Clear textarea and restore focus for quick multiple messages
+                textarea.value = '';
+                textarea.focus();
+            });
+
+            // Accessibility: allow Ctrl+Enter to submit
+            textarea.addEventListener('keydown', function (ev) {
+                if ((ev.ctrlKey || ev.metaKey) && ev.key === 'Enter') {
+                    ev.preventDefault();
+                    form.dispatchEvent(new Event('submit', { cancelable: true }));
+                }
+            });
+        })();
+    </script>
 </body>
 </html>
