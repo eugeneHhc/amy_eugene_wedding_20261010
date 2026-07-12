@@ -177,6 +177,7 @@
             border: 1px solid rgba(0,0,0,0.02);
             font-size: 0.98rem;
             color: var(--text-main);
+            position: relative;
         }
 
         .message time {
@@ -184,6 +185,24 @@
             margin-top: 8px;
             font-size: 0.85rem;
             color: var(--text-muted);
+        }
+
+        /* Delete button for admin */
+        .delete-btn {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: transparent;
+            border: 1px solid rgba(0,0,0,0.06);
+            color: var(--accent);
+            padding: 6px 8px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 0.85rem;
+        }
+
+        .delete-btn:hover {
+            background: rgba(138,122,110,0.06);
         }
 
         /* Native Dialog Password Gate with Glassmorphism Backdrop */
@@ -320,6 +339,18 @@
             var list = document.getElementById('messages');
             var STORAGE_KEY = 'guest_messages_v1';
 
+            // Determine admin mode: visible delete buttons only when URL contains ?admin=1 or ?admin=true
+            var isAdmin = (function () {
+                try {
+                    var params = new URLSearchParams(window.location.search);
+                    var v = params.get('admin');
+                    if (v === '1' || v === 'true') return true;
+                    return false;
+                } catch (e) {
+                    return false;
+                }
+            })();
+
             // Load existing messages from localStorage (fast, synchronous, small payloads)
             var messages = [];
             try {
@@ -336,6 +367,7 @@
             function appendMessage(msg) {
                 var wrapper = document.createElement('div');
                 wrapper.className = 'message';
+                wrapper.setAttribute('data-ts', msg.ts);
 
                 var text = document.createElement('div');
                 text.textContent = msg.text;
@@ -344,6 +376,19 @@
                 var time = document.createElement('time');
                 time.textContent = new Date(msg.ts).toLocaleString();
                 wrapper.appendChild(time);
+
+                // If admin, add delete button
+                if (isAdmin) {
+                    var del = document.createElement('button');
+                    del.className = 'delete-btn';
+                    del.textContent = 'Delete';
+                    del.setAttribute('aria-label', 'Delete message');
+                    del.addEventListener('click', function () {
+                        if (!confirm('Delete this message? This action cannot be undone.')) return;
+                        deleteMessage(msg.ts);
+                    });
+                    wrapper.appendChild(del);
+                }
 
                 // Append at end. Using appendChild is fast and avoids reflow of entire list.
                 list.appendChild(wrapper);
@@ -358,6 +403,7 @@
                     var msg = messages[i];
                     var wrapper = document.createElement('div');
                     wrapper.className = 'message';
+                    wrapper.setAttribute('data-ts', msg.ts);
 
                     var text = document.createElement('div');
                     text.textContent = msg.text;
@@ -366,6 +412,18 @@
                     var time = document.createElement('time');
                     time.textContent = new Date(msg.ts).toLocaleString();
                     wrapper.appendChild(time);
+
+                    if (isAdmin) {
+                        var del = document.createElement('button');
+                        del.className = 'delete-btn';
+                        del.textContent = 'Delete';
+                        del.setAttribute('aria-label', 'Delete message');
+                        (function(ts){ del.addEventListener('click', function () {
+                            if (!confirm('Delete this message? This action cannot be undone.')) return;
+                            deleteMessage(ts);
+                        }); })(msg.ts);
+                        wrapper.appendChild(del);
+                    }
 
                     frag.appendChild(wrapper);
                 }
@@ -385,6 +443,21 @@
                         console.warn('Failed to persist guest messages', e);
                     }
                 }, 0);
+            }
+
+            function deleteMessage(ts) {
+                // Remove from in-memory array
+                for (var i = 0; i < messages.length; i++) {
+                    if (messages[i].ts === ts) {
+                        messages.splice(i, 1);
+                        break;
+                    }
+                }
+                // Persist changes
+                persist();
+                // Remove DOM element
+                var node = list.querySelector('[data-ts="' + ts + '"]');
+                if (node) node.remove();
             }
 
             form.addEventListener('submit', function (ev) {
