@@ -304,31 +304,29 @@
 
         <section class="gallery-grid">
             <div class="photo-frame">
-                <img src="https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&w=800&q=85" alt="Pre-wedding Moment 1" loading="lazy">
+                <img src="photos/1.svg" alt="Pre-wedding Moment 1" loading="lazy">
             </div>
             <div class="photo-frame">
-                <img src="https://images.unsplash.com/photo-1511285560929-80b456fea0bc?auto=format&fit=crop&w=800&q=85" alt="Pre-wedding Moment 2" loading="lazy">
+                <img src="photos/2.svg" alt="Pre-wedding Moment 2" loading="lazy">
             </div>
             <div class="photo-frame">
-                <img src="https://images.unsplash.com/photo-1583939003579-730e3918a45a?auto=format&fit=crop&w=800&q=85" alt="Pre-wedding Moment 3" loading="lazy">
+                <img src="photos/3.svg" alt="Pre-wedding Moment 3" loading="lazy">
             </div>
         </section>
 
         <script>
         (function () {
-          // Simpler gallery: always use the uc?export=view&id=<id> variant (no fetch probes) to avoid CORS fetch errors.
-          // Google Drive does not return Access-Control-Allow-Origin headers, so fetch() probes will be blocked by CORS even
-          // when the image is publicly viewable. Using the uc?export=view endpoint is the most direct image URL Drive provides.
+          // Gallery using repo-hosted images (photos/). This avoids Google Drive hotlinking and CORS issues.
 
           const imgEls = Array.from(document.querySelectorAll('.gallery-grid .photo-frame img'));
           const BATCH_SIZE = imgEls.length || 3;
           const INTERVAL_MS = 10000; // 10 seconds
 
-          // The 3 full Google Drive file "view" URLs you provided (kept for reference)
-          const providedUrls = [
-            'https://drive.google.com/file/d/1ijPZYg9RaKOQyqmPCdZvX_QmFglClXXU/view?usp=drive_link',
-            'https://drive.google.com/file/d/1fRfJOqz00S9UXJFjysG7BzYicakt2-mB/view?usp=drive_link',
-            'https://drive.google.com/file/d/1V6YDhE-HmfKZjCBLTXnSdskkhr2FhemW/view?usp=drive_link'
+          // Local photo paths (committed to the repo under photos/)
+          const photoPaths = [
+            'photos/1.svg',
+            'photos/2.svg',
+            'photos/3.svg'
           ];
 
           function logDebug() {
@@ -344,51 +342,37 @@
             }
           }
 
-          function extractIdFromDriveUrl(url) {
-            try {
-              var m = url.match(/\/d\/([a-zA-Z0-9_-]+)/);
-              return m ? m[1] : null;
-            } catch (e) { return null; }
-          }
-
-          // Build uc URLs directly and assign to images. Avoid fetch() to prevent CORS errors in console.
-          var ucUrls = providedUrls.map(function(u){
-            var id = extractIdFromDriveUrl(u);
-            return id ? ('https://drive.google.com/uc?export=view&id=' + id) : u;
-          });
-
           var index = 0;
           var timer = null;
 
           function renderBatch() {
             for (let i = 0; i < BATCH_SIZE; i++) {
               const pos = index + i;
-              if (pos < ucUrls.length) {
-                var src = ucUrls[pos];
+              if (pos < photoPaths.length) {
+                var src = photoPaths[pos];
                 imgEls[i].src = src;
                 imgEls[i].loading = 'lazy';
-                (function(el, src, orig){
+                (function(el, src){
                   el.onload = function() { logDebug('[gallery] image loaded', src); };
-                  el.onerror = function(ev) { logDebug('[gallery] image load FAILED for', src, 'original=', orig, 'event=', ev && ev.type ? ev.type : ev); };
-                })(imgEls[i], src, providedUrls[pos]);
+                  el.onerror = function(ev) { logDebug('[gallery] image load FAILED for', src, 'event=', ev && ev.type ? ev.type : ev); };
+                })(imgEls[i], src);
               } else {
                 imgEls[i].src = '';
               }
             }
             index += BATCH_SIZE;
-            if (index >= ucUrls.length) {
+            if (index >= photoPaths.length) {
               clearInterval(timer);
             }
           }
 
           // initial render and scheduling
           renderBatch();
-          if (ucUrls.length > BATCH_SIZE) {
+          if (photoPaths.length > BATCH_SIZE) {
             timer = setInterval(renderBatch, INTERVAL_MS);
           }
 
-          // Helpful debug note for users: 403 or onerror usually means file isn't shared publicly.
-          logDebug('[gallery] assigned uc?export=view URLs; if you see 403 or onerror, ensure each Drive file is shared as "Anyone with the link can view" (open each file in an incognito window to test).');
+          logDebug('[gallery] using repo-hosted photos:', photoPaths.join(', '));
         })();
         </script>
 
