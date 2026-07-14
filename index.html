@@ -304,29 +304,30 @@
 
         <section class="gallery-grid">
             <div class="photo-frame">
-                <img src="photos/1.svg" alt="Pre-wedding Moment 1" loading="lazy">
+                <img src="https://lh3.googleusercontent.com/d/1ijPZYg9RaKOQyqmPCdZvX_QmFglClXXU" alt="Pre-wedding Moment 1" loading="lazy">
             </div>
             <div class="photo-frame">
-                <img src="photos/2.svg" alt="Pre-wedding Moment 2" loading="lazy">
+                <img src="https://lh3.googleusercontent.com/d/1fRfJOqz00S9UXJFjysG7BzYicakt2-mB" alt="Pre-wedding Moment 2" loading="lazy">
             </div>
             <div class="photo-frame">
-                <img src="photos/3.svg" alt="Pre-wedding Moment 3" loading="lazy">
+                <img src="https://lh3.googleusercontent.com/d/1V6YDhE-HmfKZjCBLTXnSdskkhr2FhemW" alt="Pre-wedding Moment 3" loading="lazy">
             </div>
         </section>
 
         <script>
         (function () {
-          // Gallery using repo-hosted images (photos/). This avoids Google Drive hotlinking and CORS issues.
+          // Gallery using lh3.googleusercontent.com direct URLs the user provided.
+          // These may still require the Drive files to be shared publicly. If they fail,
+          // consider uploading images to the repo or using a simple proxy.
 
           const imgEls = Array.from(document.querySelectorAll('.gallery-grid .photo-frame img'));
           const BATCH_SIZE = imgEls.length || 3;
           const INTERVAL_MS = 10000; // 10 seconds
 
-          // Local photo paths (committed to the repo under photos/)
           const photoPaths = [
-            'photos/1.svg',
-            'photos/2.svg',
-            'photos/3.svg'
+            'https://lh3.googleusercontent.com/d/1ijPZYg9RaKOQyqmPCdZvX_QmFglClXXU',
+            'https://lh3.googleusercontent.com/d/1fRfJOqz00S9UXJFjysG7BzYicakt2-mB',
+            'https://lh3.googleusercontent.com/d/1V6YDhE-HmfKZjCBLTXnSdskkhr2FhemW'
           ];
 
           function logDebug() {
@@ -372,7 +373,7 @@
             timer = setInterval(renderBatch, INTERVAL_MS);
           }
 
-          logDebug('[gallery] using repo-hosted photos:', photoPaths.join(', '));
+          logDebug('[gallery] assigned lh3.googleusercontent.com URLs; check the debug box below for load failures.');
         })();
         </script>
 
