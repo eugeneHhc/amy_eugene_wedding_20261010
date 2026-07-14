@@ -338,7 +338,7 @@
 
     <script>
         // Lightweight in-memory + localStorage messages with optional Firebase Realtime Database sync.
-        // Added verbose debug logging to help diagnose realtime sync issues.
+        // Added verbose debug logs and automatic URL fallbacks to help diagnose realtime sync issues.
         (function () {
             var form = document.getElementById('guestForm');
             var textarea = document.getElementById('gmsg');
@@ -365,7 +365,7 @@
             var FIREBASE_CONFIG = {
               apiKey: "AIzaSyC0DG1KO2QQpGRckTFDlZLJHP14dOOhGNY",
               authDomain: "amyeugenewedding20261010.firebaseapp.com",
-              databaseURL: "https://amyeugenewedding20261010.firebaseio.com",
+              databaseURL: "https://amyeugenewedding20261010-default-rtdb.asia-southeast1.firebasedatabase.app",
               projectId: "amyeugenewedding20261010",
               storageBucket: "amyeugenewedding20261010.firebasestorage.app",
               messagingSenderId: "1090930693469",
@@ -388,14 +388,55 @@
             // Firebase initialization (optional)
             var useFirebase = false;
             var firebaseRef = null;
-            try {
-                logDebug('[guest-messages] attempting Firebase init', FIREBASE_CONFIG && FIREBASE_CONFIG.databaseURL ? FIREBASE_CONFIG.databaseURL : '<no databaseURL>');
-                if (ENABLE_FIREBASE && window.firebase && FIREBASE_CONFIG && FIREBASE_CONFIG.databaseURL) {
+
+            function tryInitWithDatabaseURL(dbUrl) {
+                try {
+                    logDebug('[guest-messages] trying firebase init with databaseURL=', dbUrl);
+                    // If an app already exists, delete it before reinitializing to avoid duplicate app errors
+                    if (window.firebase && firebase.apps && firebase.apps.length) {
+                        try {
+                            // delete existing apps (best effort)
+                            firebase.apps.forEach(function (a) {
+                                try { a.delete(); } catch (e) { /* ignore */ }
+                            });
+                        } catch (e) { /* ignore */ }
+                    }
+                    FIREBASE_CONFIG.databaseURL = dbUrl;
                     firebase.initializeApp(FIREBASE_CONFIG);
                     var db = firebase.database();
                     firebaseRef = db.ref('/guest_messages_v1');
                     useFirebase = true;
-                    logDebug('[guest-messages] Firebase initialized successfully, using Realtime Database at', FIREBASE_CONFIG.databaseURL);
+                    logDebug('[guest-messages] initialized Firebase with', dbUrl);
+                    return true;
+                } catch (e) {
+                    logDebug('[guest-messages] firebase init failed for', dbUrl, e && e.message ? e.message : e);
+                    try { useFirebase = false; } catch (_) {}
+                    return false;
+                }
+            }
+
+            try {
+                logDebug('[guest-messages] attempting Firebase init original databaseURL', FIREBASE_CONFIG && FIREBASE_CONFIG.databaseURL ? FIREBASE_CONFIG.databaseURL : '<no databaseURL>');
+                if (ENABLE_FIREBASE && window.firebase && FIREBASE_CONFIG && FIREBASE_CONFIG.databaseURL) {
+                    // First try the provided URL
+                    if (!tryInitWithDatabaseURL(FIREBASE_CONFIG.databaseURL)) {
+                        // If it failed, try common variations automatically (helps when databaseURL differs)
+                        var pid = FIREBASE_CONFIG.projectId || '';
+                        var candidates = [];
+                        if (pid) {
+                            candidates.push('https://' + pid + '.firebaseio.com');
+                            candidates.push('https://' + pid + '-default-rtdb.firebaseio.com');
+                            candidates.push('https://' + pid + '.firebasedatabase.app');
+                        }
+                        // Add a few safe hard-coded fallbacks
+                        candidates.push('https://' + (FIREBASE_CONFIG.databaseURL || '').replace(/^https?:\/\//, ''));
+
+                        for (var i = 0; i < candidates.length; i++) {
+                            var c = candidates[i];
+                            if (!c) continue;
+                            if (tryInitWithDatabaseURL(c)) break;
+                        }
+                    }
                 } else if (!window.firebase) {
                     logDebug('[guest-messages] Firebase SDK is not loaded (window.firebase is falsy)');
                 } else if (!FIREBASE_CONFIG || !FIREBASE_CONFIG.databaseURL) {
@@ -403,8 +444,12 @@
                 }
             } catch (e) {
                 console.error('[guest-messages] Firebase init failed', e);
-                logDebug('[guest-messages] Firebase init failed:', e && e.message ? e.message : e);
+                logDebug('[guest-messages] Firebase init failed final:', e && e.message ? e.message : e);
                 useFirebase = false;
+            }
+
+            if (useFirebase) {
+                logDebug('[guest-messages] Firebase initialized successfully, using Realtime Database at', FIREBASE_CONFIG.databaseURL);
             }
 
             // In-memory messages array. If using Firebase we start empty and rely on realtime events.
