@@ -344,16 +344,17 @@
             var list = document.getElementById('messages');
             var STORAGE_KEY = 'guest_messages_v1';
 
-            // Firebase toggle & placeholder config. Replace these values and set ENABLE_FIREBASE = true.
-            var ENABLE_FIREBASE = false; // set true to activate Firebase
+            // Firebase toggle & config. Provided client Web App config inserted here.
+            var ENABLE_FIREBASE = true; // enabled by request
             var FIREBASE_CONFIG = {
-                apiKey: "REPLACE_WITH_API_KEY",
-                authDomain: "REPLACE_WITH_PROJECT.firebaseapp.com",
-                databaseURL: "https://REPLACE_WITH_PROJECT.firebaseio.com",
-                projectId: "REPLACE_WITH_PROJECT",
-                storageBucket: "REPLACE_WITH_PROJECT.appspot.com",
-                messagingSenderId: "REPLACE_WITH_SENDER_ID",
-                appId: "REPLACE_WITH_APP_ID"
+              apiKey: "AIzaSyC0DG1KO2QQpGRckTFDlZLJHP14dOOhGNY",
+              authDomain: "amyeugenewedding20261010.firebaseapp.com",
+              databaseURL: "https://amyeugenewedding20261010.firebaseio.com",
+              projectId: "amyeugenewedding20261010",
+              storageBucket: "amyeugenewedding20261010.firebasestorage.app",
+              messagingSenderId: "1090930693469",
+              appId: "1:1090930693469:web:19786a45013faa71bb04b4",
+              measurementId: "G-SYWGR84162"
             };
 
             // Determine admin mode: visible delete buttons only when URL contains ?admin=1 or ?admin=true
