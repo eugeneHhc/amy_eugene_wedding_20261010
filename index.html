@@ -330,14 +330,31 @@
         </section>
     </main>
 
+    <!-- Firebase SDK (compat) - required only if you enable Firebase below -->
+    <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-database-compat.js"></script>
+
     <script>
-        // Lightweight in-memory + localStorage messages.
-        // Performance goals: minimal DOM updates, simple append-only rendering, no external libraries.
+        // Lightweight in-memory + localStorage messages with optional Firebase Realtime Database sync.
+        // Minimal change: localStorage behavior preserved as a fallback. To enable shared messages, set
+        // ENABLE_FIREBASE = true and fill FIREBASE_CONFIG with your Firebase project's config below.
         (function () {
             var form = document.getElementById('guestForm');
             var textarea = document.getElementById('gmsg');
             var list = document.getElementById('messages');
             var STORAGE_KEY = 'guest_messages_v1';
+
+            // Firebase toggle & placeholder config. Replace these values and set ENABLE_FIREBASE = true.
+            var ENABLE_FIREBASE = false; // set true to activate Firebase
+            var FIREBASE_CONFIG = {
+                apiKey: "REPLACE_WITH_API_KEY",
+                authDomain: "REPLACE_WITH_PROJECT.firebaseapp.com",
+                databaseURL: "https://REPLACE_WITH_PROJECT.firebaseio.com",
+                projectId: "REPLACE_WITH_PROJECT",
+                storageBucket: "REPLACE_WITH_PROJECT.appspot.com",
+                messagingSenderId: "REPLACE_WITH_SENDER_ID",
+                appId: "REPLACE_WITH_APP_ID"
+            };
 
             // Determine admin mode: visible delete buttons only when URL contains ?admin=1 or ?admin=true
             var isAdmin = (function () {
@@ -351,23 +368,47 @@
                 }
             })();
 
-            // Load existing messages from localStorage (fast, synchronous, small payloads)
-            var messages = [];
+            // Firebase initialization (optional)
+            var useFirebase = false;
+            var firebaseRef = null;
             try {
-                var raw = localStorage.getItem(STORAGE_KEY);
-                if (raw) messages = JSON.parse(raw);
+                if (ENABLE_FIREBASE && window.firebase && FIREBASE_CONFIG && FIREBASE_CONFIG.databaseURL) {
+                    firebase.initializeApp(FIREBASE_CONFIG);
+                    var db = firebase.database();
+                    firebaseRef = db.ref('/guest_messages_v1');
+                    useFirebase = true;
+                }
             } catch (e) {
-                // If parsing fails, clear storage entry to avoid repeated errors.
-                console.warn('Failed to read guest messages from localStorage', e);
-                try { localStorage.removeItem(STORAGE_KEY); } catch (ignored) {}
-                messages = [];
+                console.warn('Firebase init failed, falling back to localStorage', e);
+                useFirebase = false;
+            }
+
+            // In-memory messages array. If using Firebase we start empty and rely on realtime events.
+            var messages = [];
+
+            if (!useFirebase) {
+                // Load existing messages from localStorage (fast, synchronous, small payloads)
+                try {
+                    var raw = localStorage.getItem(STORAGE_KEY);
+                    if (raw) messages = JSON.parse(raw);
+                } catch (e) {
+                    // If parsing fails, clear storage entry to avoid repeated errors.
+                    console.warn('Failed to read guest messages from localStorage', e);
+                    try { localStorage.removeItem(STORAGE_KEY); } catch (ignored) {}
+                    messages = [];
+                }
             }
 
             // Helper: create message DOM node and append
             function appendMessage(msg) {
                 var wrapper = document.createElement('div');
                 wrapper.className = 'message';
-                wrapper.setAttribute('data-ts', msg.ts);
+                // Prefer stable id if present (Firebase key), fall back to timestamp
+                if (msg.key) {
+                    wrapper.setAttribute('data-key', msg.key);
+                } else {
+                    wrapper.setAttribute('data-ts', msg.ts);
+                }
 
                 var text = document.createElement('div');
                 text.textContent = msg.text;
@@ -385,7 +426,7 @@
                     del.setAttribute('aria-label', 'Delete message');
                     del.addEventListener('click', function () {
                         if (!confirm('Delete this message? This action cannot be undone.')) return;
-                        deleteMessage(msg.ts);
+                        deleteMessage(msg);
                     });
                     wrapper.appendChild(del);
                 }
@@ -394,10 +435,10 @@
                 list.appendChild(wrapper);
             }
 
-            // Render initial messages (append only)
+            // Render initial messages (append only) - used for localStorage fallback
             (function renderInitial() {
+                if (useFirebase) return; // Firebase will populate via realtime events
                 if (!messages || !messages.length) return;
-                // Create a document fragment to minimize reflows
                 var frag = document.createDocumentFragment();
                 for (var i = 0; i < messages.length; i++) {
                     var msg = messages[i];
@@ -420,7 +461,7 @@
                         del.setAttribute('aria-label', 'Delete message');
                         (function(ts){ del.addEventListener('click', function () {
                             if (!confirm('Delete this message? This action cannot be undone.')) return;
-                            deleteMessage(ts);
+                            deleteMessage({ ts: ts });
                         }); })(msg.ts);
                         wrapper.appendChild(del);
                     }
@@ -430,9 +471,42 @@
                 list.appendChild(frag);
             })();
 
+            // If using Firebase, wire realtime listeners to populate messages for all visitors
+            if (useFirebase && firebaseRef) {
+                // Clear in-memory to avoid mixing with localStorage
+                messages = [];
+
+                // child_added fires once for each existing child and subsequently for new children
+                firebaseRef.on('child_added', function (snap) {
+                    var val = snap.val();
+                    if (!val) return;
+                    var msg = { text: val.text, ts: val.ts || Date.now(), key: snap.key };
+                    messages.push(msg);
+                    appendMessage(msg);
+                });
+
+                // child_removed: remove from DOM and in-memory
+                firebaseRef.on('child_removed', function (snap) {
+                    var key = snap.key;
+                    // remove from in-memory
+                    for (var i = 0; i < messages.length; i++) {
+                        if (messages[i].key === key) {
+                            messages.splice(i, 1);
+                            break;
+                        }
+                    }
+                    // remove DOM element
+                    var node = list.querySelector('[data-key="' + key + '"]');
+                    if (node) node.remove();
+                });
+
+                // Note: we intentionally do not persist to localStorage when using Firebase
+            }
+
             // Persist messages to localStorage (debounced to avoid excessive writes)
             var saveTimer = null;
             function persist() {
+                if (useFirebase) return; // do not persist when using shared DB
                 if (saveTimer) return; // simple throttle: at most once per event loop tick
                 saveTimer = setTimeout(function () {
                     saveTimer = null;
@@ -445,18 +519,39 @@
                 }, 0);
             }
 
-            function deleteMessage(ts) {
-                // Remove from in-memory array
-                for (var i = 0; i < messages.length; i++) {
-                    if (messages[i].ts === ts) {
-                        messages.splice(i, 1);
-                        break;
+            function deleteMessage(msgOrKey) {
+                // msgOrKey may be an object { key } or { ts } from various code paths
+                var key = null;
+                var ts = null;
+                if (msgOrKey && typeof msgOrKey === 'object') {
+                    key = msgOrKey.key || null;
+                    ts = msgOrKey.ts || null;
+                } else if (typeof msgOrKey === 'string') {
+                    key = msgOrKey;
+                }
+
+                if (useFirebase && key) {
+                    // remove from firebase; child_removed listener will update DOM and memory
+                    firebaseRef.child(key).remove().catch(function (e) {
+                        console.warn('Failed to remove message from Firebase', e);
+                    });
+                    return;
+                }
+
+                // Fallback: remove by timestamp from in-memory array
+                if (ts) {
+                    for (var i = 0; i < messages.length; i++) {
+                        if (messages[i].ts === ts) {
+                            messages.splice(i, 1);
+                            break;
+                        }
                     }
                 }
                 // Persist changes
                 persist();
                 // Remove DOM element
-                var node = list.querySelector('[data-ts="' + ts + '"]');
+                var selector = key ? '[data-key="' + key + '"]' : '[data-ts="' + ts + '"]';
+                var node = list.querySelector(selector);
                 if (node) node.remove();
             }
 
@@ -468,14 +563,26 @@
                 // Create message object
                 var msg = { text: text, ts: Date.now() };
 
-                // Append to in-memory array
-                messages.push(msg);
-
-                // Append to DOM immediately (fast path)
-                appendMessage(msg);
-
-                // Persist asynchronously
-                persist();
+                if (useFirebase && firebaseRef) {
+                    // Push to Firebase so all visitors see it
+                    var newRef = firebaseRef.push();
+                    newRef.set(msg).then(function () {
+                        // Success: the realtime 'child_added' listener will append the message for all clients
+                    }).catch(function (e) {
+                        console.warn('Failed to write message to Firebase, falling back to localStorage', e);
+                        // fallback to local behavior
+                        messages.push(msg);
+                        appendMessage(msg);
+                        persist();
+                    });
+                } else {
+                    // Append to in-memory array
+                    messages.push(msg);
+                    // Append to DOM immediately (fast path)
+                    appendMessage(msg);
+                    // Persist asynchronously
+                    persist();
+                }
 
                 // Clear textarea and restore focus for quick multiple messages
                 textarea.value = '';
