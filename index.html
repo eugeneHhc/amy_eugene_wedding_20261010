@@ -314,6 +314,52 @@
             </div>
         </section>
 
+        <script>
+        (function () {
+          // Minimal script to show 3 Google Drive images (provided) 10s per batch until all processed.
+          const imgEls = Array.from(document.querySelectorAll('.gallery-grid .photo-frame img'));
+          const BATCH_SIZE = imgEls.length || 3;
+          const INTERVAL_MS = 10000; // 10 seconds
+
+          // Google Drive file IDs (from the URLs you provided)
+          const driveIds = [
+            '1YexYPHbwvi5c5CWorrzE97g5hA2FTs00',
+            '1W6AiOry1pOqPMrGHGZzZUUJV-015rvUX',
+            '1Ieompsett2URqbIPD9vkN4ps451S4eHd'
+          ];
+
+          // Build direct-view URLs (requires files be shared "Anyone with the link can view")
+          const urls = driveIds.map(id => 'https://drive.google.com/uc?export=view&id=' + id);
+
+          if (!urls.length) return; // nothing to do
+
+          let index = 0;
+          let timer = null;
+
+          function renderBatch() {
+            for (let i = 0; i < BATCH_SIZE; i++) {
+              const pos = index + i;
+              if (pos < urls.length) {
+                imgEls[i].src = urls[pos];
+                imgEls[i].loading = 'lazy';
+              } else {
+                imgEls[i].src = '';
+              }
+            }
+            index += BATCH_SIZE;
+            if (index >= urls.length) {
+              clearInterval(timer);
+            }
+          }
+
+          // initial render and scheduling
+          renderBatch();
+          if (urls.length > BATCH_SIZE) {
+            timer = setInterval(renderBatch, INTERVAL_MS);
+          }
+        })();
+        </script>
+
         <section id="guest-messages" class="rsvp-container">
             <h2>Leave your congratulations</h2>
             <p class="lead">Share a short message for the newlyweds — your kind words will be treasured.</p>
