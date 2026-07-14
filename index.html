@@ -316,46 +316,114 @@
 
         <script>
         (function () {
-          // Minimal script to show 3 Google Drive images (provided) 10s per batch until all processed.
+          // Improved script to show 3 Google Drive images (provided) 10s per batch until all processed.
+          // Uses the three full "view" URLs you supplied. Adds verbose debug logging and a fallback to
+          // the uc?export=view&id=<id> endpoint if the direct view URL doesn't appear to serve an image.
+
           const imgEls = Array.from(document.querySelectorAll('.gallery-grid .photo-frame img'));
           const BATCH_SIZE = imgEls.length || 3;
           const INTERVAL_MS = 10000; // 10 seconds
 
-          // Google Drive file IDs (from the URLs you provided)
-          const driveIds = [
-            '1V6YDhE-HmfKZjCBLTXnSdskkhr2FhemW',
-            '1fRfJOqz00S9UXJFjysG7BzYicakt2-mB',
-            '1ijPZYg9RaKOQyqmPCdZvX_QmFglClXXU'
+          // The 3 full Google Drive file "view" URLs (as requested)
+          const providedUrls = [
+            'https://drive.google.com/file/d/1ijPZYg9RaKOQyqmPCdZvX_QmFglClXXU/view?usp=drive_link',
+            'https://drive.google.com/file/d/1fRfJOqz00S9UXJFjysG7BzYicakt2-mB/view?usp=drive_link',
+            'https://drive.google.com/file/d/1V6YDhE-HmfKZjCBLTXnSdskkhr2FhemW/view?usp=drive_link'
           ];
 
-          // Build direct-view URLs (requires files be shared "Anyone with the link can view")
-          const urls = driveIds.map(id => 'https://drive.google.com/uc?export=view&id=' + id);
+          function logDebug() {
+            var args = Array.prototype.slice.call(arguments);
+            try { console.debug.apply(console, args); } catch (e) { console.log.apply(console, args); }
+            var dbg = document.getElementById('firebase-debug');
+            if (dbg) {
+              try {
+                dbg.textContent = args.map(function (a) { return (typeof a === 'object') ? JSON.stringify(a) : String(a); }).join(' | ');
+              } catch (e) {
+                dbg.textContent = String(args.join(' | '));
+              }
+            }
+          }
 
-          if (!urls.length) return; // nothing to do
+          if (!providedUrls.length) return;
 
-          let index = 0;
-          let timer = null;
+          function extractIdFromDriveUrl(url) {
+            try {
+              var m = url.match(/\/d\/([a-zA-Z0-9_-]+)/);
+              return m ? m[1] : null;
+            } catch (e) { return null; }
+          }
 
-          function renderBatch() {
+          // Build uc fallback URLs from IDs
+          var fallbackUcUrls = providedUrls.map(function(u){
+            var id = extractIdFromDriveUrl(u);
+            return id ? ('https://drive.google.com/uc?export=view&id=' + id) : null;
+          });
+
+          // Try to detect whether a URL will return an image by fetching (CORS may block this; we handle failures).
+          async function probeUrl(url) {
+            try {
+              logDebug('[gallery] probing', url);
+              var res = await fetch(url, { method: 'GET', mode: 'cors', cache: 'no-store' });
+              logDebug('[gallery] fetch result', url, 'status=' + res.status);
+              var ct = res.headers.get('content-type');
+              logDebug('[gallery] content-type for', url, ct);
+              if (res.ok && ct && ct.indexOf('image') === 0) return { ok: true, url: url };
+            } catch (e) {
+              logDebug('[gallery] fetch error for', url, e && e.message ? e.message : e);
+            }
+            return { ok: false };
+          }
+
+          // For each source URL, attempt probe, then fallback to uc URL if necessary. If both probes fail
+          // we still return the original URL so the <img> element can attempt to load it (onerror will fire).
+          async function resolveBestUrl(idx) {
+            var primary = providedUrls[idx];
+            var fallback = fallbackUcUrls[idx];
+            // If the primary was already a uc link (unlikely here), prefer it.
+            var primaryProbe = await probeUrl(primary).catch(function(e){ logDebug('[gallery] probe primary threw', e && e.message ? e.message : e); return { ok:false }; });
+            if (primaryProbe.ok) return primary;
+            if (fallback) {
+              var fbProbe = await probeUrl(fallback).catch(function(e){ logDebug('[gallery] probe fallback threw', e && e.message ? e.message : e); return { ok:false }; });
+              if (fbProbe.ok) return fallback;
+            }
+            // Nothing proved successful via fetch (CORS or 403), return primary so image tag will attempt to load it.
+            return primary;
+          }
+
+          var index = 0;
+          var timer = null;
+
+          async function renderBatch() {
             for (let i = 0; i < BATCH_SIZE; i++) {
               const pos = index + i;
-              if (pos < urls.length) {
-                imgEls[i].src = urls[pos];
-                imgEls[i].loading = 'lazy';
+              if (pos < providedUrls.length) {
+                try {
+                  var resolved = await resolveBestUrl(pos);
+                  imgEls[i].src = resolved;
+                  imgEls[i].loading = 'lazy';
+                  // attach onload/onerror to capture runtime load results
+                  (function(el, src, orig){
+                    el.onload = function() { logDebug('[gallery] image loaded', src); };
+                    el.onerror = function(ev) { logDebug('[gallery] image load FAILED for', src, 'original=', orig, 'event=', ev && ev.type ? ev.type : ev); };
+                  })(imgEls[i], resolved, providedUrls[pos]);
+                } catch (e) {
+                  logDebug('[gallery] failed to set image for pos', pos, e && e.message ? e.message : e);
+                  imgEls[i].src = providedUrls[pos];
+                }
               } else {
                 imgEls[i].src = '';
               }
             }
             index += BATCH_SIZE;
-            if (index >= urls.length) {
+            if (index >= providedUrls.length) {
               clearInterval(timer);
             }
           }
 
           // initial render and scheduling
-          renderBatch();
-          if (urls.length > BATCH_SIZE) {
-            timer = setInterval(renderBatch, INTERVAL_MS);
+          renderBatch().catch(function(e){ logDebug('[gallery] initial renderBatch failed', e && e.message ? e.message : e); });
+          if (providedUrls.length > BATCH_SIZE) {
+            timer = setInterval(function(){ renderBatch().catch(function(e){ logDebug('[gallery] scheduled renderBatch failed', e && e.message ? e.message : e); }); }, INTERVAL_MS);
           }
         })();
         </script>
