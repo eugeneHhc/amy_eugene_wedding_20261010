@@ -43,16 +43,62 @@ body {
   text-transform: uppercase;
 }
 
-.meta-info {
-  font-size: clamp(1.1rem, 2vw, 1.3rem);
-  color: var(--text-muted);
-  font-weight: 300;
-  letter-spacing: 1px;
+.invitation-copy {
+  display: grid;
+  gap: 2.5rem;
+  max-width: 720px;
+  margin: 0 auto;
+  text-align: center;
 }
 
-.meta-info b {
-  color: var(--text-main);
+.invitation-block {
+  padding: 0 0.5rem;
+}
+
+.invitation-block + .invitation-block {
+  border-top: 1px solid rgba(138, 122, 110, 0.14);
+  padding-top: 1.75rem;
+}
+
+.invitation-block .headline {
+  margin-bottom: 0.85rem;
+  font-size: clamp(1.15rem, 2vw, 1.35rem);
+  color: var(--accent);
   font-weight: 500;
+}
+
+.invitation-block .body,
+.invitation-block .event {
+  margin: 0 auto;
+  color: var(--text-muted);
+  font-size: clamp(1rem, 1.8vw, 1.22rem);
+  line-height: 1.85;
+  max-width: 560px;
+}
+
+.invitation-block .body {
+  margin-bottom: 1rem;
+}
+
+.invitation-block .event {
+  color: var(--text-main);
+  font-weight: 300;
+}
+
+.invitation-block .event a {
+  color: var(--accent);
+  text-decoration: none;
+}
+
+.invitation-block .event a:hover,
+.invitation-block .event a:focus {
+  text-decoration: underline;
+}
+
+@media (min-width: 720px) {
+  .invitation-copy {
+    gap: 3rem;
+  }
 }
 
 .gallery-grid {
