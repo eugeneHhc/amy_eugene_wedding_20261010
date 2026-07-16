@@ -304,76 +304,100 @@
 
         <section class="gallery-grid">
             <div class="photo-frame">
-                <img src="https://lh3.googleusercontent.com/d/1ijPZYg9RaKOQyqmPCdZvX_QmFglClXXU" alt="Pre-wedding Moment 1" loading="lazy">
+                <img alt="Wedding photo 1" loading="lazy">
             </div>
             <div class="photo-frame">
-                <img src="https://lh3.googleusercontent.com/d/1fRfJOqz00S9UXJFjysG7BzYicakt2-mB" alt="Pre-wedding Moment 2" loading="lazy">
+                <img alt="Wedding photo 2" loading="lazy">
             </div>
             <div class="photo-frame">
-                <img src="https://lh3.googleusercontent.com/d/1V6YDhE-HmfKZjCBLTXnSdskkhr2FhemW" alt="Pre-wedding Moment 3" loading="lazy">
+                <img alt="Wedding photo 3" loading="lazy">
+            </div>
+            <div class="photo-frame">
+                <img alt="Wedding photo 4" loading="lazy">
             </div>
         </section>
 
         <script>
         (function () {
-          // Gallery using lh3.googleusercontent.com direct URLs the user provided.
-          // These may still require the Drive files to be shared publicly. If they fail,
-          // consider uploading images to the repo or using a simple proxy.
-
           const imgEls = Array.from(document.querySelectorAll('.gallery-grid .photo-frame img'));
-          const BATCH_SIZE = imgEls.length || 3;
+          const BATCH_SIZE = 4;
           const INTERVAL_MS = 10000; // 10 seconds
 
           const photoPaths = [
-            'https://lh3.googleusercontent.com/d/1ijPZYg9RaKOQyqmPCdZvX_QmFglClXXU',
             'https://lh3.googleusercontent.com/d/1fRfJOqz00S9UXJFjysG7BzYicakt2-mB',
-            'https://lh3.googleusercontent.com/d/1V6YDhE-HmfKZjCBLTXnSdskkhr2FhemW'
+            'https://lh3.googleusercontent.com/d/1V6YDhE-HmfKZjCBLTXnSdskkhr2FhemW',
+            'https://lh3.googleusercontent.com/d/1ijPZYg9RaKOQyqmPCdZvX_QmFglClXXU',
+            'https://lh3.googleusercontent.com/d/1vXHy16taTTqy8s2U9b0pC5coRM47bc4m',
+            'https://lh3.googleusercontent.com/d/1ZVhaIgn5IANosXrBt4auNTHNgvTcdgGq',
+            'https://lh3.googleusercontent.com/d/1OwyrDVUeFrz65ZTfERUHFa78aobohTs1',
+            'https://lh3.googleusercontent.com/d/1SUQWemSCg5b1va5rkMIyG8B_rrA28HnU',
+            'https://lh3.googleusercontent.com/d/1b-sV4kuJB4JZUibrjtQnuqepHZs2dpBg',
+            'https://lh3.googleusercontent.com/d/1h1-fPA-7QiCNnVKb_ZskBtbdjRwvzChC',
+            'https://lh3.googleusercontent.com/d/1zsgTAAmxInG0TXBT8--84joLa2NqNeF8',
+            'https://lh3.googleusercontent.com/d/18yzpEyFygcAHeaINPCX66cO-SSkc7DCw',
+            'https://lh3.googleusercontent.com/d/1ILZvE2wuLLln0Cc2zBeZkbgd5QImbAjz',
+            'https://lh3.googleusercontent.com/d/1KTXdo-NuxyC1RedKTUNePm3_LL8lI0z2',
+            'https://lh3.googleusercontent.com/d/1vKW74T6FkWXGYMLJLlzNftcQJ_CsOx06',
+            'https://lh3.googleusercontent.com/d/1Pth0hzCEqKHnsplYskPoNdDahx1gsr9o',
+            'https://lh3.googleusercontent.com/d/1q7M1fw3H-zIi8liZa80uHh6I3nS6Q2l7',
+            'https://lh3.googleusercontent.com/d/11OmJXahYjZX3amFWhvWDjNaKuraYxSto',
+            'https://lh3.googleusercontent.com/d/114dB1d19DAQpjAHYP-2Imy2wICF-ATUR',
+            'https://lh3.googleusercontent.com/d/1RSVwxOldK5yJUnE8TBl6FjAUsCunYG8J',
+            'https://lh3.googleusercontent.com/d/1VuM_IA8MTmdzar1GPbxWPqgYVRwMDb-X',
+            'https://lh3.googleusercontent.com/d/1hTDPDl-oSZEncz6jHC2EVjR2vNK5uRRt',
+            'https://lh3.googleusercontent.com/d/1FoWx8nIPafQyi94DMo8GhSsI4D7dWh45',
+            'https://lh3.googleusercontent.com/d/1UsmhB-G1PNKMj48j8yXnZQfjn0g3oNvw',
+            'https://lh3.googleusercontent.com/d/1e49bIZwNBmsJBrVrV7D8sexdWVO7bGe1',
+            'https://lh3.googleusercontent.com/d/1RD5-TAIVy8s0qHFd9NKvIBQkNRTJfd5Y',
+            'https://lh3.googleusercontent.com/d/1JpN9Y1-aiE99PtFyE3e1ONv8xjepqMS5',
+            'https://lh3.googleusercontent.com/d/1iOek7Lv3DKuKOpNOTk4P6HR8XTi1v2SA',
+            'https://lh3.googleusercontent.com/d/1AS1obOi2VtXoEZRS86J9d6nA5i8o528m',
+            'https://lh3.googleusercontent.com/d/1dxWYuuotYPfJbdMI9EplDLGnPEllWkGP',
+            'https://lh3.googleusercontent.com/d/1LGd7vBr_L06y5x3OBwWQ5z8OXeSbTjBS',
+            'https://lh3.googleusercontent.com/d/1vKDA4cp0bjUI_2OpX18GgPk00sFfjWRn',
+            'https://lh3.googleusercontent.com/d/1ev58PPk1ETWihumV4HZi726USoaOiFgE',
+            'https://lh3.googleusercontent.com/d/1gCFyoNgkYiyQxgoHIRS-6CAjwQS0jKMX',
+            'https://lh3.googleusercontent.com/d/1Qtrz4Qv46zMHufRQk4AVUoPQpaF5NUh7',
+            'https://lh3.googleusercontent.com/d/1-E8f0UVWgaU2mvvzEDN9ujvST1exg9Is',
+            'https://lh3.googleusercontent.com/d/1OGj7BbrqLyHzon7IKagNNTd0PVzZ1ZKf',
+            'https://lh3.googleusercontent.com/d/1D95eaoj3LbhL4V19JTWB5k_uf2DEjECr',
+            'https://lh3.googleusercontent.com/d/1bYEd5LTsUvyi_iwEe6trJS7uECgMANtp',
+            'https://lh3.googleusercontent.com/d/1RWp868na3D3nBbFsorEQraLn_6ZuGQOx',
+            'https://lh3.googleusercontent.com/d/1TC2FogZK-MF9xKDefAYu6swjCNe0xm9B'
           ];
 
-          function logDebug() {
-            var args = Array.prototype.slice.call(arguments);
-            try { console.debug.apply(console, args); } catch (e) { console.log.apply(console, args); }
-            var dbg = document.getElementById('firebase-debug');
-            if (dbg) {
-              try {
-                dbg.textContent = args.map(function (a) { return (typeof a === 'object') ? JSON.stringify(a) : String(a); }).join(' | ');
-              } catch (e) {
-                dbg.textContent = String(args.join(' | '));
-              }
-            }
-          }
+          let batchIndex = 0;
+          const totalBatches = Math.ceil(photoPaths.length / BATCH_SIZE);
 
-          var index = 0;
-          var timer = null;
+          function clearSlots() {
+            imgEls.forEach(function (img) {
+              img.removeAttribute('src');
+              img.alt = '';
+            });
+          }
 
           function renderBatch() {
+            clearSlots();
+
+            const start = batchIndex * BATCH_SIZE;
             for (let i = 0; i < BATCH_SIZE; i++) {
-              const pos = index + i;
+              const pos = start + i;
+              const img = imgEls[i];
+              if (!img) continue;
+
               if (pos < photoPaths.length) {
-                var src = photoPaths[pos];
-                imgEls[i].src = src;
-                imgEls[i].loading = 'lazy';
-                (function(el, src){
-                  el.onload = function() { logDebug('[gallery] image loaded', src); };
-                  el.onerror = function(ev) { logDebug('[gallery] image load FAILED for', src, 'event=', ev && ev.type ? ev.type : ev); };
-                })(imgEls[i], src);
-              } else {
-                imgEls[i].src = '';
+                const src = photoPaths[pos];
+                img.src = src;
+                img.alt = 'Wedding photo ' + (pos + 1);
+                img.loading = 'lazy';
               }
             }
-            index += BATCH_SIZE;
-            if (index >= photoPaths.length) {
-              clearInterval(timer);
-            }
+
+            batchIndex = (batchIndex + 1) % totalBatches;
           }
 
-          // initial render and scheduling
           renderBatch();
-          if (photoPaths.length > BATCH_SIZE) {
-            timer = setInterval(renderBatch, INTERVAL_MS);
-          }
-
-          logDebug('[gallery] assigned lh3.googleusercontent.com URLs; check the debug box below for load failures.');
+          setInterval(renderBatch, INTERVAL_MS);
         })();
         </script>
 
