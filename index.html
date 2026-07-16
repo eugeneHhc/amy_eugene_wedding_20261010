@@ -80,12 +80,21 @@
                 border-radius: var(--radius);
                 box-shadow: var(--card-shadow);
                 aspect-ratio: 4 / 5;
+                background: linear-gradient(135deg, rgba(138, 122, 110, 0.08), rgba(138, 122, 110, 0.02));
 
                 img {
                     width: 100%;
                     height: 100%;
                     object-fit: cover;
-                    transition: transform 0.8s cubic-bezier(0.25, 1, 0.5, 1);
+                    opacity: 0;
+                    transform: scale(1.03);
+                    transition: opacity 0.7s ease, transform 0.7s ease;
+                    will-change: opacity, transform;
+
+                    &.is-visible {
+                        opacity: 1;
+                        transform: scale(1);
+                    }
 
                     &:hover {
                         transform: scale(1.04);
@@ -321,7 +330,7 @@
         (function () {
           const imgEls = Array.from(document.querySelectorAll('.gallery-grid .photo-frame img'));
           const BATCH_SIZE = 4;
-          const INTERVAL_MS = 10000; // 10 seconds
+          const INTERVAL_MS = 3000; // 3 seconds
 
           const photoPaths = [
             'https://lh3.googleusercontent.com/d/1fRfJOqz00S9UXJFjysG7BzYicakt2-mB',
@@ -369,16 +378,21 @@
           let batchIndex = 0;
           const totalBatches = Math.ceil(photoPaths.length / BATCH_SIZE);
 
-          function clearSlots() {
-            imgEls.forEach(function (img) {
-              img.removeAttribute('src');
-              img.alt = '';
-            });
+          function showImage(img, src, alt) {
+            img.classList.remove('is-visible');
+            img.style.opacity = '0';
+            img.style.transform = 'scale(1.03)';
+            img.alt = '';
+
+            window.setTimeout(function () {
+              img.src = src;
+              img.alt = alt;
+              img.loading = 'lazy';
+              img.classList.add('is-visible');
+            }, 180);
           }
 
           function renderBatch() {
-            clearSlots();
-
             const start = batchIndex * BATCH_SIZE;
             for (let i = 0; i < BATCH_SIZE; i++) {
               const pos = start + i;
@@ -387,9 +401,12 @@
 
               if (pos < photoPaths.length) {
                 const src = photoPaths[pos];
-                img.src = src;
-                img.alt = 'Wedding photo ' + (pos + 1);
-                img.loading = 'lazy';
+                const alt = 'Wedding photo ' + (pos + 1);
+                showImage(img, src, alt);
+              } else {
+                img.removeAttribute('src');
+                img.alt = '';
+                img.classList.remove('is-visible');
               }
             }
 
