@@ -74,33 +74,38 @@
             grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
             gap: 24px;
             margin-bottom: clamp(3rem, 8vw, 6rem);
+        }
 
-            .photo-frame {
-                overflow: hidden;
-                border-radius: var(--radius);
-                box-shadow: var(--card-shadow);
-                aspect-ratio: 4 / 5;
-                background: linear-gradient(135deg, rgba(138, 122, 110, 0.08), rgba(138, 122, 110, 0.02));
+        .gallery-grid .photo-frame {
+            overflow: hidden;
+            border-radius: var(--radius);
+            box-shadow: var(--card-shadow);
+            aspect-ratio: 4 / 5;
+            background: linear-gradient(135deg, rgba(138, 122, 110, 0.08), rgba(138, 122, 110, 0.02));
+        }
 
-                img {
-                    width: 100%;
-                    height: 100%;
-                    object-fit: cover;
-                    opacity: 0;
-                    transform: scale(1.03);
-                    transition: opacity 0.6s ease, transform 0.6s ease;
-                    will-change: opacity, transform;
+        .gallery-grid .photo-frame img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            opacity: 0;
+            transform: scale(1.03);
+            transition: opacity 0.6s ease, transform 0.6s ease;
+            will-change: opacity, transform;
+        }
 
-                    &.is-visible {
-                        opacity: 1;
-                        transform: scale(1);
-                    }
+        .gallery-grid .photo-frame img.is-visible {
+            opacity: 1;
+            transform: scale(1);
+        }
 
-                    &:hover {
-                        transform: scale(1.04);
-                    }
-                }
-            }
+        .gallery-grid .photo-frame img.is-hidden {
+            opacity: 0;
+            transform: scale(1.03);
+        }
+
+        .gallery-grid .photo-frame img:hover {
+            transform: scale(1.04);
         }
 
         /* Clean RSVP / Guest Messages Wrapper Layout */
@@ -332,48 +337,10 @@
           const BATCH_SIZE = 4;
           const INTERVAL_MS = 3000; // 3 seconds
 
-          const photoPaths = [
-            'https://lh3.googleusercontent.com/d/1fRfJOqz00S9UXJFjysG7BzYicakt2-mB',
-            'https://lh3.googleusercontent.com/d/1V6YDhE-HmfKZjCBLTXnSdskkhr2FhemW',
-            'https://lh3.googleusercontent.com/d/1ijPZYg9RaKOQyqmPCdZvX_QmFglClXXU',
-            'https://lh3.googleusercontent.com/d/1vXHy16taTTqy8s2U9b0pC5coRM47bc4m',
-            'https://lh3.googleusercontent.com/d/1ZVhaIgn5IANosXrBt4auNTHNgvTcdgGq',
-            'https://lh3.googleusercontent.com/d/1OwyrDVUeFrz65ZTfERUHFa78aobohTs1',
-            'https://lh3.googleusercontent.com/d/1SUQWemSCg5b1va5rkMIyG8B_rrA28HnU',
-            'https://lh3.googleusercontent.com/d/1b-sV4kuJB4JZUibrjtQnuqepHZs2dpBg',
-            'https://lh3.googleusercontent.com/d/1h1-fPA-7QiCNnVKb_ZskBtbdjRwvzChC',
-            'https://lh3.googleusercontent.com/d/1zsgTAAmxInG0TXBT8--84joLa2NqNeF8',
-            'https://lh3.googleusercontent.com/d/18yzpEyFygcAHeaINPCX66cO-SSkc7DCw',
-            'https://lh3.googleusercontent.com/d/1ILZvE2wuLLln0Cc2zBeZkbgd5QImbAjz',
-            'https://lh3.googleusercontent.com/d/1KTXdo-NuxyC1RedKTUNePm3_LL8lI0z2',
-            'https://lh3.googleusercontent.com/d/1vKW74T6FkWXGYMLJLlzNftcQJ_CsOx06',
-            'https://lh3.googleusercontent.com/d/1Pth0hzCEqKHnsplYskPoNdDahx1gsr9o',
-            'https://lh3.googleusercontent.com/d/1q7M1fw3H-zIi8liZa80uHh6I3nS6Q2l7',
-            'https://lh3.googleusercontent.com/d/11OmJXahYjZX3amFWhvWDjNaKuraYxSto',
-            'https://lh3.googleusercontent.com/d/114dB1d19DAQpjAHYP-2Imy2wICF-ATUR',
-            'https://lh3.googleusercontent.com/d/1RSVwxOldK5yJUnE8TBl6FjAUsCunYG8J',
-            'https://lh3.googleusercontent.com/d/1VuM_IA8MTmdzar1GPbxWPqgYVRwMDb-X',
-            'https://lh3.googleusercontent.com/d/1hTDPDl-oSZEncz6jHC2EVjR2vNK5uRRt',
-            'https://lh3.googleusercontent.com/d/1FoWx8nIPafQyi94DMo8GhSsI4D7dWh45',
-            'https://lh3.googleusercontent.com/d/1UsmhB-G1PNKMj48j8yXnZQfjn0g3oNvw',
-            'https://lh3.googleusercontent.com/d/1e49bIZwNBmsJBrVrV7D8sexdWVO7bGe1',
-            'https://lh3.googleusercontent.com/d/1RD5-TAIVy8s0qHFd9NKvIBQkNRTJfd5Y',
-            'https://lh3.googleusercontent.com/d/1JpN9Y1-aiE99PtFyE3e1ONv8xjepqMS5',
-            'https://lh3.googleusercontent.com/d/1iOek7Lv3DKuKOpNOTk4P6HR8XTi1v2SA',
-            'https://lh3.googleusercontent.com/d/1AS1obOi2VtXoEZRS86J9d6nA5i8o528m',
-            'https://lh3.googleusercontent.com/d/1dxWYuuotYPfJbdMI9EplDLGnPEllWkGP',
-            'https://lh3.googleusercontent.com/d/1LGd7vBr_L06y5x3OBwWQ5z8OXeSbTjBS',
-            'https://lh3.googleusercontent.com/d/1vKDA4cp0bjUI_2OpX18GgPk00sFfjWRn',
-            'https://lh3.googleusercontent.com/d/1ev58PPk1ETWihumV4HZi726USoaOiFgE',
-            'https://lh3.googleusercontent.com/d/1gCFyoNgkYiyQxgoHIRS-6CAjwQS0jKMX',
-            'https://lh3.googleusercontent.com/d/1Qtrz4Qv46zMHufRQk4AVUoPQpaF5NUh7',
-            'https://lh3.googleusercontent.com/d/1-E8f0UVWgaU2mvvzEDN9ujvST1exg9Is',
-            'https://lh3.googleusercontent.com/d/1OGj7BbrqLyHzon7IKagNNTd0PVzZ1ZKf',
-            'https://lh3.googleusercontent.com/d/1D95eaoj3LbhL4V19JTWB5k_uf2DEjECr',
-            'https://lh3.googleusercontent.com/d/1bYEd5LTsUvyi_iwEe6trJS7uECgMANtp',
-            'https://lh3.googleusercontent.com/d/1RWp868na3D3nBbFsorEQraLn_6ZuGQOx',
-            'https://lh3.googleusercontent.com/d/1TC2FogZK-MF9xKDefAYu6swjCNe0xm9B'
-          ];
+          const photoPaths = Array.from({ length: 40 }, function (_, index) {
+            var id = (index % 3) + 1;
+            return 'photos/' + id + '.svg';
+          });
 
           let batchIndex = 0;
           const totalBatches = Math.ceil(photoPaths.length / BATCH_SIZE);
@@ -381,6 +348,7 @@
 
           function clearSlot(img) {
             img.classList.remove('is-visible');
+            img.classList.add('is-hidden');
             img.style.opacity = '0';
             img.style.transform = 'scale(1.03)';
             img.removeAttribute('src');
@@ -388,16 +356,41 @@
           }
 
           function revealImage(img, src, alt) {
-            img.onload = function () {
+            img.classList.remove('is-hidden');
+            img.classList.remove('is-visible');
+            img.style.opacity = '0';
+            img.style.transform = 'scale(1.03)';
+
+            function showImage() {
               img.classList.add('is-visible');
-            };
-            img.onerror = function () {
+              img.style.opacity = '1';
+              img.style.transform = 'scale(1)';
+            }
+
+            function showError() {
               img.classList.remove('is-visible');
+              img.classList.add('is-hidden');
+              img.style.opacity = '0';
+              img.style.transform = 'scale(1.03)';
               img.alt = 'Image unavailable';
-            };
+            }
+
+            img.onload = null;
+            img.onerror = null;
             img.src = src;
             img.alt = alt;
             img.loading = 'lazy';
+
+            if (img.complete && img.naturalWidth > 0) {
+              showImage();
+            } else {
+              img.onload = function () {
+                showImage();
+              };
+              img.onerror = function () {
+                showError();
+              };
+            }
           }
 
           function renderBatch() {
