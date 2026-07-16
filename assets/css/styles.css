@@ -75,8 +75,8 @@ body {
   height: 100%;
   object-fit: cover;
   opacity: 0;
-  transform: scale(1.03);
-  transition: opacity 0.6s ease, transform 0.6s ease;
+  transform: scale(1.02);
+  transition: opacity 0.55s ease, transform 0.55s ease;
   will-change: opacity, transform;
 }
 
@@ -87,11 +87,11 @@ body {
 
 .gallery-grid .photo-frame img.is-hidden {
   opacity: 0;
-  transform: scale(1.03);
+  transform: scale(1.02);
 }
 
 .gallery-grid .photo-frame img:hover {
-  transform: scale(1.04);
+  transform: scale(1.03);
 }
 
 .rsvp-container {
