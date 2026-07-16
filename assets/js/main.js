@@ -1,7 +1,7 @@
 (function () {
   const imgEls = Array.from(document.querySelectorAll('.gallery-grid .photo-frame img'));
   const debugEl = document.getElementById('gallery-debug');
-  const BATCH_SIZE = 4;
+  const BATCH_SIZE = 1;
   const INTERVAL_MS = 3000;
   const PHOTO_FADE_MS = 180;
   const photoPaths = (window.GALLERY_PHOTO_PATHS || []);
