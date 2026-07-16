@@ -88,7 +88,7 @@
                     object-fit: cover;
                     opacity: 0;
                     transform: scale(1.03);
-                    transition: opacity 0.7s ease, transform 0.7s ease;
+                    transition: opacity 0.6s ease, transform 0.6s ease;
                     will-change: opacity, transform;
 
                     &.is-visible {
@@ -377,19 +377,27 @@
 
           let batchIndex = 0;
           const totalBatches = Math.ceil(photoPaths.length / BATCH_SIZE);
+          let timer = null;
 
-          function showImage(img, src, alt) {
+          function clearSlot(img) {
             img.classList.remove('is-visible');
             img.style.opacity = '0';
             img.style.transform = 'scale(1.03)';
+            img.removeAttribute('src');
             img.alt = '';
+          }
 
-            window.setTimeout(function () {
-              img.src = src;
-              img.alt = alt;
-              img.loading = 'lazy';
+          function revealImage(img, src, alt) {
+            img.onload = function () {
               img.classList.add('is-visible');
-            }, 180);
+            };
+            img.onerror = function () {
+              img.classList.remove('is-visible');
+              img.alt = 'Image unavailable';
+            };
+            img.src = src;
+            img.alt = alt;
+            img.loading = 'lazy';
           }
 
           function renderBatch() {
@@ -399,14 +407,12 @@
               const img = imgEls[i];
               if (!img) continue;
 
+              clearSlot(img);
+
               if (pos < photoPaths.length) {
                 const src = photoPaths[pos];
                 const alt = 'Wedding photo ' + (pos + 1);
-                showImage(img, src, alt);
-              } else {
-                img.removeAttribute('src');
-                img.alt = '';
-                img.classList.remove('is-visible');
+                revealImage(img, src, alt);
               }
             }
 
@@ -414,7 +420,7 @@
           }
 
           renderBatch();
-          setInterval(renderBatch, INTERVAL_MS);
+          timer = window.setInterval(renderBatch, INTERVAL_MS);
         })();
         </script>
 
