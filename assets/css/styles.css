@@ -94,6 +94,15 @@ body {
   transform: scale(1.03);
 }
 
+.gallery-debug {
+  margin-top: -0.5rem;
+  margin-bottom: 1.5rem;
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  min-height: 1.2em;
+  word-break: break-all;
+}
+
 .rsvp-container {
   background: #ffffff;
   border-radius: var(--radius);
