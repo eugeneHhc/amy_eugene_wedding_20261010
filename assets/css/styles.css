@@ -597,6 +597,18 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 .zh-section {
+  max-width: 680px;
+  margin: 2rem auto;
+  padding: 3.5rem 2.5rem;
+  background-color: #FAFAFA;
+  background-image: url('../../photos/background2.jpeg');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  min-height: 300px;
+  border-radius: 16px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+  text-align: center;
   font-family: var(--font-serif-zh);
   color: var(--color-text-main);
   line-height: 1.8;
