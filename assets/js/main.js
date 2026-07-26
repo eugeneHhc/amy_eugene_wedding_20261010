@@ -11,14 +11,14 @@
   let timer = null;
   const imageCache = new Map();
 
-  function logDebug(message, detail) {
+  /* function logDebug(message, detail) {
     const stamp = new Date().toLocaleTimeString('en-GB', { hour12: false });
     const entry = '[' + stamp + '] ' + message;
     console.log(entry, detail || '');
     if (debugEl) {
       debugEl.textContent = entry + (detail ? ' | ' + detail : '');
     }
-  }
+  } */
 
   function resetSlot(img) {
     img.classList.remove('is-visible');
@@ -44,7 +44,7 @@
     img.style.transform = 'scale(1.02)';
     img.alt = 'Image unavailable';
     img.dataset.state = 'error';
-    logDebug('gallery image failed', reason);
+    //logDebug('gallery image failed', reason);
   }
 
   function loadImage(src) {
@@ -88,7 +88,7 @@
     }
 
     const startedAt = performance.now();
-    logDebug('gallery preloading batch ' + batchNumber + ' of ' + totalBatches, items.map(function (item) { return item.src; }).join(' | '));
+    //logDebug('gallery preloading batch ' + batchNumber + ' of ' + totalBatches, items.map(function (item) { return item.src; }).join(' | '));
 
     return Promise.all(items.map(function (item) {
       return loadImage(item.src).then(function () {
@@ -96,7 +96,7 @@
       });
     })).then(function (results) {
       const duration = Math.round(performance.now() - startedAt);
-      logDebug('gallery batch ' + batchNumber + ' ready in ' + duration + 'ms', results.length + ' images');
+      //logDebug('gallery batch ' + batchNumber + ' ready in ' + duration + 'ms', results.length + ' images');
       return results;
     });
   }
@@ -136,13 +136,13 @@
       if (img.complete && img.naturalWidth > 0) {
         window.requestAnimationFrame(function () {
           showSlot(img);
-          logDebug('gallery batch ' + batchNumber + ' slot ' + (i + 1) + ' revealed', src);
+          //logDebug('gallery batch ' + batchNumber + ' slot ' + (i + 1) + ' revealed', src);
         });
       } else {
         img.onload = function () {
           window.requestAnimationFrame(function () {
             showSlot(img);
-            logDebug('gallery batch ' + batchNumber + ' slot ' + (i + 1) + ' revealed', src);
+            //logDebug('gallery batch ' + batchNumber + ' slot ' + (i + 1) + ' revealed', src);
           });
         };
         img.onerror = function () {
@@ -156,21 +156,21 @@
 
   function renderBatch() {
     if (!photoPaths.length) {
-      logDebug('gallery has no photos configured', '');
+      //logDebug('gallery has no photos configured', '');
       return;
     }
 
     const nextBatchIndex = (activeBatchIndex + 1) % totalBatches;
     const nextBatchNumber = nextBatchIndex + 1;
 
-    logDebug('gallery switching to batch ' + nextBatchNumber + ' of ' + totalBatches, '');
+    //logDebug('gallery switching to batch ' + nextBatchNumber + ' of ' + totalBatches, '');
 
     preloadBatch(nextBatchIndex)
       .then(function (preparedItems) {
         applyBatch(nextBatchIndex, nextBatchNumber, preparedItems);
       })
       .catch(function (error) {
-        logDebug('gallery batch preload failed', error && error.message ? error.message : error);
+        //logDebug('gallery batch preload failed', error && error.message ? error.message : error);
       });
   }
 
@@ -179,7 +179,7 @@
       applyBatch(activeBatchIndex, 1, preparedItems);
     })
     .catch(function (error) {
-      logDebug('gallery initial preload failed', error && error.message ? error.message : error);
+      //logDebug('gallery initial preload failed', error && error.message ? error.message : error);
     });
 
   timer = window.setInterval(renderBatch, INTERVAL_MS);

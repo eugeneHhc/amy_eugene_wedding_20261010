@@ -8,467 +8,104 @@
     
     <title>Amy & Eugene | Wedding Celebration at Hong Kong Disneyland Hotel</title>
     <link rel="stylesheet" href="assets/css/styles.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=Montserrat:wght@400;500;600&family=Noto+Serif+TC:wght@400;600&display=swap" rel="stylesheet">
 </head>
 <body>
-    <main class="wrapper">
-        <header>
-            <h1>Amy & Eugene</h1>
-            <div class="invitation-copy">
-                <div class="invitation-block invitation-block--english">
-                    <p class="headline">Our "happily ever after" begins here...</p>
-                    <p class="body">
-                        Amy &amp; Eugene<br>
-                        invite you to celebrate their love story<br>
+    <div class="page-layout">
+        <nav class="sidebar">
+            <!-- <div class="sidebar-header">
+                <a href="index.html" class="sidebar-brand">
+                    <img src="photos/wedding_logo.png" alt="Amy &amp; Eugene" class="sidebar-logo">
+                </a>
+            </div> -->
+            <ul class="sidebar-links">
+                <li><a href="index.html" class="active">Home<br/>主頁</a></li>
+                <li><a href="photos.html">Pre-wedding Photos<br/>巴黎婚照</a></li>
+                <li><a href="messages.html">Messages<br/>留言</a></li>
+            </ul>
+        </nav>
+        <main class="main-content">
+            <div class="wrapper">
+                <div class="invitation-card">
+                    <h1 class="card-header">Amy & Eugene</h1>
+
+                    <p class="tagline">Our "happily ever after" begins here...</p>
+
+                    <p class="invite-text">
+                        Amy &amp; Eugene invite you to celebrate their love story<br>
                         and witness their wedding ceremony.
                     </p>
-                    <p class="event">
-                        Saturday, October 10, 2026<br>
-                        At 3:00 PM<br>
-                        <a href="https://maps.app.goo.gl/SLkeT8nFsdHoeuRE8" target="_blank" rel="noopener noreferrer">Hong Kong Disneyland Hotel</a>
-                    </p>
+
+                    <div class="event-details">
+                        <span>Saturday, October 10, 2026</span>
+                        <span>At 3:00 PM</span>
+                        <a class="venue-link" href="https://maps.app.goo.gl/SLkeT8nFsdHoeuRE8" target="_blank" rel="noopener noreferrer">Hong Kong Disneyland Hotel</a>
+                    </div>
+
+                    <hr class="divider">
+
+                    <div class="zh-section">
+                        <p class="zh-tagline">童話故事的新篇章...</p>
+
+                        <p class="zh-invite-text">
+                            Amy &amp; Eugene 誠意邀請您，<br>
+                            一同前來分享我們的喜悅，<br>
+                            見證我們互許終身的夢幻時刻。
+                        </p>
+
+                        <div class="zh-details-list">
+                            <div class="zh-details-item">
+                                <span class="zh-details-label">日期：</span>
+                                <span>2026 年 10 月 10 日（星期六）</span>
+                            </div>
+                            <div class="zh-details-item">
+                                <span class="zh-details-label">時間：</span>
+                                <span>下午 3:00（證婚儀式開始）</span>
+                            </div>
+                            <div class="zh-details-item">
+                                <span class="zh-details-label">地點：</span>
+                                <a class="venue-link" href="https://maps.app.goo.gl/SLkeT8nFsdHoeuRE8" target="_blank" rel="noopener noreferrer">香港迪士尼樂園酒店</a>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-                <div class="invitation-block invitation-block--chinese">
-                    <p class="headline">童話故事的新篇章...</p>
-                    <p class="body">
-                        Amy &amp; Eugene 誠意邀請您，<br>
-                        一同前來分享我們的喜悅，見證我們互許終身的夢幻時刻。
-                    </p>
-                    <p class="event">
-                        日期：2026 年 10 月 10 日（星期六）<br>
-                        時間：下午 3:00（儀式開始）<br>
-                        地點：<a href="https://maps.app.goo.gl/SLkeT8nFsdHoeuRE8" target="_blank" rel="noopener noreferrer">香港迪士尼樂園酒店</a>
-                    </p>
+
+                <div id="countdown" class="countdown-box" aria-live="polite">
+                    <div class="countdown-panel countdown-panel--english">
+                        <p class="countdown-label">Days until the celebration</p>
+                        <p class="countdown-value"><span id="countdown-days">0</span> days</p>
+                    </div>
+                    <div class="countdown-panel countdown-panel--chinese">
+                        <p class="countdown-label">距離慶典還有</p>
+                        <p class="countdown-value"><span id="countdown-days-cn">0</span> 天</p>
+                    </div>
                 </div>
+
             </div>
-        </header>
 
-        <div id="countdown" class="countdown-box" aria-live="polite">
-            <div class="countdown-panel countdown-panel--english">
-                <p class="countdown-label">Days until the celebration</p>
-                <p class="countdown-value"><span id="countdown-days">0</span> days</p>
-            </div>
-            <div class="countdown-panel countdown-panel--chinese">
-                <p class="countdown-label">距離慶典還有</p>
-                <p class="countdown-value"><span id="countdown-days-cn">0</span> 天</p>
-            </div>
-        </div>
+            <script>
+                (function() {
+                    var countdownEl = document.getElementById('countdown-days');
+                    var countdownElCn = document.getElementById('countdown-days-cn');
+                    var targetDate = new Date('2026-10-10T13:00:00');
 
-        <section class="gallery-grid">
-            <div class="photo-frame photo-frame--single">
-                <img alt="Wedding photo" loading="lazy">
-            </div>
-        </section>
-        <div id="gallery-debug" class="gallery-debug" aria-live="polite" aria-atomic="true"></div>
-
-        <script src="assets/js/gallery-config.js"></script>
-        <script src="assets/js/main.js"></script>
-        <script>
-            (function() {
-                var countdownEl = document.getElementById('countdown-days');
-                var countdownElCn = document.getElementById('countdown-days-cn');
-                var targetDate = new Date('2026-10-10T13:00:00');
-
-                function updateCountdown() {
-                    if (!countdownEl || !countdownElCn) return;
-                    var now = new Date();
-                    var diff = targetDate - now;
-                    var days = diff > 0 ? Math.ceil(diff / 86400000) : 0;
-                    countdownEl.textContent = days;
-                    countdownElCn.textContent = days;
-                }
-
-                updateCountdown();
-                setInterval(updateCountdown, 3600000);
-            })();
-        </script>
-
-        <section id="guest-messages" class="rsvp-container">
-            <h2>Leave your congratulations</h2>
-            <p class="lead">Share a short message for the newlyweds — your kind words will be treasured.</p>
-
-            <!-- Replaced Google Form embed with a lightweight, local guest message textarea. -->
-            <form id="guestForm" class="guest-form" action="#" method="post" novalidate>
-                <textarea id="gmsg" name="message" placeholder="Write your message here..." maxlength="1000" required aria-label="Message for newlyweds"></textarea>
-                <div>
-                    <button id="send" type="submit">Submit</button>
-                </div>
-            </form>
-
-            <div class="messages" id="messages" aria-live="polite" aria-atomic="true"></div>
-            <!-- Debug/status area for Firebase connection -->
-            <div id="firebase-debug" style="margin-top:12px;font-size:0.92rem;color:#555"></div>
-        </section>
-    </main>
-
-    <!-- Firebase SDK (compat) - required only if you enable Firebase below -->
-    <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-database-compat.js"></script>
-
-    <script>
-        // Lightweight in-memory + localStorage messages with optional Firebase Realtime Database sync.
-        // Added verbose debug logs and automatic URL fallbacks to help diagnose realtime sync issues.
-        (function () {
-            var form = document.getElementById('guestForm');
-            var textarea = document.getElementById('gmsg');
-            var list = document.getElementById('messages');
-            var debugEl = document.getElementById('firebase-debug');
-            var STORAGE_KEY = 'guest_messages_v1';
-
-            function logDebug() {
-                var args = Array.prototype.slice.call(arguments);
-                try { console.debug.apply(console, args); } catch (e) { console.log.apply(console, args); }
-                if (debugEl) {
-                    try {
-                        debugEl.textContent = args.map(function (a) { return (typeof a === 'object') ? JSON.stringify(a) : String(a); }).join(' | ');
-                    } catch (e) {
-                        debugEl.textContent = String(args.join(' | '));
-                    }
-                }
-            }
-
-            logDebug('[guest-messages] script loaded', 'window.firebase present=', !!window.firebase);
-
-            // Firebase toggle & config. Provided client Web App config inserted here.
-            var ENABLE_FIREBASE = true; // enabled
-            var FIREBASE_CONFIG = {
-              apiKey: "AIzaSyC0DG1KO2QQpGRckTFDlZLJHP14dOOhGNY",
-              authDomain: "amyeugenewedding20261010.firebaseapp.com",
-              databaseURL: "https://amyeugenewedding20261010-default-rtdb.asia-southeast1.firebasedatabase.app",
-              projectId: "amyeugenewedding20261010",
-              storageBucket: "amyeugenewedding20261010.firebasestorage.app",
-              messagingSenderId: "1090930693469",
-              appId: "1:1090930693469:web:19786a45013faa71bb04b4",
-              measurementId: "G-SYWGR84162"
-            };
-
-            // Determine admin mode: visible delete buttons only when URL contains ?admin=1 or ?admin=true
-            var isAdmin = (function () {
-                try {
-                    var params = new URLSearchParams(window.location.search);
-                    var v = params.get('admin');
-                    if (v === '1' || v === 'true') return true;
-                    return false;
-                } catch (e) {
-                    return false;
-                }
-            })();
-
-            // Firebase initialization (optional)
-            var useFirebase = false;
-            var firebaseRef = null;
-
-            function tryInitWithDatabaseURL(dbUrl) {
-                try {
-                    logDebug('[guest-messages] trying firebase init with databaseURL=', dbUrl);
-                    // If an app already exists, delete it before reinitializing to avoid duplicate app errors
-                    if (window.firebase && firebase.apps && firebase.apps.length) {
-                        try {
-                            // delete existing apps (best effort)
-                            firebase.apps.forEach(function (a) {
-                                try { a.delete(); } catch (e) { /* ignore */ }
-                            });
-                        } catch (e) { /* ignore */ }
-                    }
-                    FIREBASE_CONFIG.databaseURL = dbUrl;
-                    firebase.initializeApp(FIREBASE_CONFIG);
-                    var db = firebase.database();
-                    firebaseRef = db.ref('/guest_messages_v1');
-                    useFirebase = true;
-                    logDebug('[guest-messages] initialized Firebase with', dbUrl);
-                    return true;
-                } catch (e) {
-                    logDebug('[guest-messages] firebase init failed for', dbUrl, e && e.message ? e.message : e);
-                    try { useFirebase = false; } catch (_) {}
-                    return false;
-                }
-            }
-
-            try {
-                logDebug('[guest-messages] attempting Firebase init original databaseURL', FIREBASE_CONFIG && FIREBASE_CONFIG.databaseURL ? FIREBASE_CONFIG.databaseURL : '<no databaseURL>');
-                if (ENABLE_FIREBASE && window.firebase && FIREBASE_CONFIG && FIREBASE_CONFIG.databaseURL) {
-                    // First try the provided URL
-                    if (!tryInitWithDatabaseURL(FIREBASE_CONFIG.databaseURL)) {
-                        // If it failed, try common variations automatically (helps when databaseURL differs)
-                        var pid = FIREBASE_CONFIG.projectId || '';
-                        var candidates = [];
-                        if (pid) {
-                            candidates.push('https://' + pid + '.firebaseio.com');
-                            candidates.push('https://' + pid + '-default-rtdb.firebaseio.com');
-                            candidates.push('https://' + pid + '.firebasedatabase.app');
-                        }
-                        // Add a few safe hard-coded fallbacks
-                        candidates.push('https://' + (FIREBASE_CONFIG.databaseURL || '').replace(/^https?:\/\//, ''));
-
-                        for (var i = 0; i < candidates.length; i++) {
-                            var c = candidates[i];
-                            if (!c) continue;
-                            if (tryInitWithDatabaseURL(c)) break;
-                        }
-                    }
-                } else if (!window.firebase) {
-                    logDebug('[guest-messages] Firebase SDK is not loaded (window.firebase is falsy)');
-                } else if (!FIREBASE_CONFIG || !FIREBASE_CONFIG.databaseURL) {
-                    logDebug('[guest-messages] Firebase config missing databaseURL');
-                }
-            } catch (e) {
-                console.error('[guest-messages] Firebase init failed', e);
-                logDebug('[guest-messages] Firebase init failed final:', e && e.message ? e.message : e);
-                useFirebase = false;
-            }
-
-            if (useFirebase) {
-                logDebug('[guest-messages] Firebase initialized successfully, using Realtime Database at', FIREBASE_CONFIG.databaseURL);
-            }
-
-            // In-memory messages array. If using Firebase we start empty and rely on realtime events.
-            var messages = [];
-
-            if (!useFirebase) {
-                // Load existing messages from localStorage (fast, synchronous, small payloads)
-                try {
-                    var raw = localStorage.getItem(STORAGE_KEY);
-                    if (raw) messages = JSON.parse(raw);
-                    logDebug('[guest-messages] loaded', messages.length, 'messages from localStorage');
-                } catch (e) {
-                    // If parsing fails, clear storage entry to avoid repeated errors.
-                    console.warn('Failed to read guest messages from localStorage', e);
-                    try { localStorage.removeItem(STORAGE_KEY); } catch (ignored) {}
-                    messages = [];
-                    logDebug('[guest-messages] localStorage read failed, cleared.');
-                }
-            }
-
-            // Helper: create message DOM node and append
-            function appendMessage(msg) {
-                var wrapper = document.createElement('div');
-                wrapper.className = 'message';
-                if (msg.key) {
-                    wrapper.setAttribute('data-key', msg.key);
-                } else {
-                    wrapper.setAttribute('data-ts', msg.ts);
-                }
-
-                var text = document.createElement('div');
-                text.textContent = msg.text;
-                wrapper.appendChild(text);
-
-                var time = document.createElement('time');
-                time.textContent = new Date(msg.ts).toLocaleString();
-                wrapper.appendChild(time);
-
-                // If admin, add delete button
-                if (isAdmin) {
-                    var del = document.createElement('button');
-                    del.className = 'delete-btn';
-                    del.textContent = 'Delete';
-                    del.setAttribute('aria-label', 'Delete message');
-                    del.addEventListener('click', function () {
-                        if (!confirm('Delete this message? This action cannot be undone.')) return;
-                        deleteMessage(msg);
-                    });
-                    wrapper.appendChild(del);
-                }
-
-                list.appendChild(wrapper);
-            }
-
-            // Render initial messages (append only) - used for localStorage fallback
-            (function renderInitial() {
-                if (useFirebase) {
-                    logDebug('[guest-messages] skipping local render; using Firebase realtime');
-                    return; // Firebase will populate via realtime events
-                }
-                if (!messages || !messages.length) {
-                    logDebug('[guest-messages] no local messages to render');
-                    return;
-                }
-                var frag = document.createDocumentFragment();
-                for (var i = 0; i < messages.length; i++) {
-                    var msg = messages[i];
-                    var wrapper = document.createElement('div');
-                    wrapper.className = 'message';
-                    wrapper.setAttribute('data-ts', msg.ts);
-
-                    var text = document.createElement('div');
-                    text.textContent = msg.text;
-                    wrapper.appendChild(text);
-
-                    var time = document.createElement('time');
-                    time.textContent = new Date(msg.ts).toLocaleString();
-                    wrapper.appendChild(time);
-
-                    if (isAdmin) {
-                        var del = document.createElement('button');
-                        del.className = 'delete-btn';
-                        del.textContent = 'Delete';
-                        del.setAttribute('aria-label', 'Delete message');
-                        (function(ts){ del.addEventListener('click', function () {
-                            if (!confirm('Delete this message? This action cannot be undone.')) return;
-                            deleteMessage({ ts: ts });
-                        }); })(msg.ts);
-                        wrapper.appendChild(del);
+                    function updateCountdown() {
+                        if (!countdownEl || !countdownElCn) return;
+                        var now = new Date();
+                        var diff = targetDate - now;
+                        var days = diff > 0 ? Math.ceil(diff / 86400000) : 0;
+                        countdownEl.textContent = days;
+                        countdownElCn.textContent = days;
                     }
 
-                    frag.appendChild(wrapper);
-                }
-                list.appendChild(frag);
-                logDebug('[guest-messages] rendered', messages.length, 'local messages');
-            })();
+                    updateCountdown();
+                    setInterval(updateCountdown, 3600000);
+                })();
+            </script>
+        </main>
+    </div>
 
-            // If using Firebase, wire realtime listeners to populate messages for all visitors
-            if (useFirebase && firebaseRef) {
-                messages = [];
-                logDebug('[guest-messages] attaching Firebase listeners');
-
-                firebaseRef.on('child_added', function (snap) {
-                    try {
-                        var val = snap.val();
-                        logDebug('[guest-messages] child_added key=', snap.key, 'val=', val);
-                        if (!val) return;
-                        var msg = { text: val.text, ts: val.ts || Date.now(), key: snap.key };
-                        messages.push(msg);
-                        appendMessage(msg);
-                    } catch (e) {
-                        console.error('[guest-messages] error in child_added handler', e);
-                        logDebug('[guest-messages] child_added handler error:', e && e.message ? e.message : e);
-                    }
-                }, function (err) {
-                    console.error('[guest-messages] Firebase child_added listener failed', err);
-                    logDebug('[guest-messages] Firebase child_added listener error:', err && err.message ? err.message : err);
-                });
-
-                firebaseRef.on('child_removed', function (snap) {
-                    try {
-                        var key = snap.key;
-                        logDebug('[guest-messages] child_removed key=', key);
-                        for (var i = 0; i < messages.length; i++) {
-                            if (messages[i].key === key) {
-                                messages.splice(i, 1);
-                                break;
-                            }
-                        }
-                        var node = list.querySelector('[data-key="' + key + '"]');
-                        if (node) node.remove();
-                    } catch (e) {
-                        console.error('[guest-messages] error in child_removed handler', e);
-                        logDebug('[guest-messages] child_removed handler error:', e && e.message ? e.message : e);
-                    }
-                }, function (err) {
-                    console.error('[guest-messages] Firebase child_removed listener failed', err);
-                    logDebug('[guest-messages] Firebase child_removed listener error:', err && err.message ? err.message : err);
-                });
-
-                // Optional: listen for connectivity state from .info/connected
-                try {
-                    var conRef = firebase.database().ref('.info/connected');
-                    conRef.on('value', function(snap) {
-                        var connected = snap.val() === true;
-                        logDebug('[guest-messages] .info/connected =', connected);
-                    });
-                } catch (e) {
-                    logDebug('[guest-messages] failed to attach .info/connected listener', e && e.message ? e.message : e);
-                }
-            }
-
-            // Persist messages to localStorage (debounced to avoid excessive writes)
-            var saveTimer = null;
-            function persist() {
-                if (useFirebase) return; // do not persist when using shared DB
-                if (saveTimer) return; // simple throttle: at most once per event loop tick
-                saveTimer = setTimeout(function () {
-                    saveTimer = null;
-                    try {
-                        localStorage.setItem(STORAGE_KEY, JSON.stringify(messages));
-                        logDebug('[guest-messages] persisted', messages.length, 'messages to localStorage');
-                    } catch (e) {
-                        console.warn('Failed to persist guest messages', e);
-                        logDebug('[guest-messages] persist failed:', e && e.message ? e.message : e);
-                    }
-                }, 0);
-            }
-
-            function deleteMessage(msgOrKey) {
-                var key = null;
-                var ts = null;
-                if (msgOrKey && typeof msgOrKey === 'object') {
-                    key = msgOrKey.key || null;
-                    ts = msgOrKey.ts || null;
-                } else if (typeof msgOrKey === 'string') {
-                    key = msgOrKey;
-                }
-
-                if (useFirebase && key) {
-                    logDebug('[guest-messages] removing key from Firebase', key);
-                    firebaseRef.child(key).remove().then(function() {
-                        logDebug('[guest-messages] firebase remove succeeded for', key);
-                    }).catch(function (e) {
-                        console.warn('Failed to remove message from Firebase', e);
-                        logDebug('[guest-messages] firebase remove failed:', e && e.message ? e.message : e);
-                    });
-                    return;
-                }
-
-                if (ts) {
-                    for (var i = 0; i < messages.length; i++) {
-                        if (messages[i].ts === ts) {
-                            messages.splice(i, 1);
-                            break;
-                        }
-                    }
-                }
-                persist();
-                var selector = key ? '[data-key="' + key + '"]' : '[data-ts="' + ts + '"]';
-                var node = list.querySelector(selector);
-                if (node) node.remove();
-                logDebug('[guest-messages] deleted local message', selector);
-            }
-
-            form.addEventListener('submit', function (ev) {
-                ev.preventDefault();
-                var text = textarea.value.trim();
-                if (!text) return;
-
-                var msg = { text: text, ts: Date.now() };
-
-                if (useFirebase && firebaseRef) {
-                    try {
-                        var newRef = firebaseRef.push();
-                        logDebug('[guest-messages] pushing to Firebase', msg);
-                        newRef.set(msg).then(function () {
-                            logDebug('[guest-messages] firebase push success key=', newRef.key);
-                        }).catch(function (e) {
-                            console.warn('Failed to write message to Firebase, falling back to localStorage', e);
-                            logDebug('[guest-messages] firebase push failed:', e && e.message ? e.message : e);
-                            messages.push(msg);
-                            appendMessage(msg);
-                            persist();
-                        });
-                    } catch (e) {
-                        console.error('[guest-messages] firebase push threw', e);
-                        logDebug('[guest-messages] firebase push threw:', e && e.message ? e.message : e);
-                        messages.push(msg);
-                        appendMessage(msg);
-                        persist();
-                    }
-                } else {
-                    messages.push(msg);
-                    appendMessage(msg);
-                    persist();
-                    logDebug('[guest-messages] appended local message', msg);
-                }
-
-                textarea.value = '';
-                textarea.focus();
-            });
-
-            // Accessibility: allow Ctrl+Enter to submit
-            textarea.addEventListener('keydown', function (ev) {
-                if ((ev.ctrlKey || ev.metaKey) && ev.key === 'Enter') {
-                    ev.preventDefault();
-                    form.dispatchEvent(new Event('submit', { cancelable: true }));
-                }
-            });
-        })();
-    </script>
 </body>
 </html>
