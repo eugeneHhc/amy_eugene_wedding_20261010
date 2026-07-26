@@ -14,12 +14,12 @@
 </head>
 <body>
     <div class="page-layout">
-        <nav class="sidebar">
-            <!-- <div class="sidebar-header">
-                <a href="index.html" class="sidebar-brand">
-                    <img src="photos/wedding_logo.png" alt="Amy &amp; Eugene" class="sidebar-logo">
-                </a>
-            </div> -->
+        <nav class="sidebar" id="sidebar">
+            <button class="nav-toggle" id="navToggle" aria-label="Toggle navigation menu">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
             <ul class="sidebar-links">
                 <li><a href="index.html">Home<br/>主頁</a></li>
                 <li><a href="photos.html">Pre-wedding Photos<br/>巴黎婚照</a></li>
@@ -44,6 +44,17 @@
                 </section>
             </div>
 
+            <script>
+                document.addEventListener('DOMContentLoaded', function() {
+                    var toggle = document.getElementById('navToggle');
+                    var sidebar = document.getElementById('sidebar');
+                    if (toggle && sidebar) {
+                        toggle.addEventListener('click', function() {
+                            sidebar.classList.toggle('nav-open');
+                        });
+                    }
+                });
+            </script>
             <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
             <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-database-compat.js"></script>
             <script>
