@@ -71,14 +71,9 @@
                 </div>
 
                 <div id="countdown" class="countdown-box" aria-live="polite">
-                    <div class="countdown-panel countdown-panel--english">
-                        <p class="countdown-label">Days until the celebration</p>
-                        <p class="countdown-value"><span id="countdown-days">0</span> days</p>
-                    </div>
-                    <div class="countdown-panel countdown-panel--chinese">
-                        <p class="countdown-label">距離慶典還有</p>
-                        <p class="countdown-value"><span id="countdown-days-cn">0</span> 天</p>
-                    </div>
+                    <p class="countdown-label">Days until the celebration</p>
+                    <p class="countdown-label countdown-label--zh">距離慶典還有</p>
+                    <p class="countdown-value"><span id="countdown-days">0</span> days 天</p>
                 </div>
 
             </div>
@@ -98,16 +93,14 @@
                 })();
                 (function() {
                     var countdownEl = document.getElementById('countdown-days');
-                    var countdownElCn = document.getElementById('countdown-days-cn');
                     var targetDate = new Date('2026-10-10T13:00:00');
 
                     function updateCountdown() {
-                        if (!countdownEl || !countdownElCn) return;
+                        if (!countdownEl) return;
                         var now = new Date();
                         var diff = targetDate - now;
                         var days = diff > 0 ? Math.ceil(diff / 86400000) : 0;
                         countdownEl.textContent = days;
-                        countdownElCn.textContent = days;
                     }
 
                     updateCountdown();
