@@ -629,6 +629,16 @@ h1, h2, h3, h4, h5, h6 {
 .zh-details-label {
   font-weight: 600;
   color: var(--color-primary);
+  /*min-width: 90px;*/
+}
+
+/* Specific width for the English section to accommodate "Ceremony:" */
+.invitation-card .zh-details-label {
+  min-width: 105px; /* Adjust slightly if needed, but 105px should clear it */
+}
+
+/* Specific width for the Chinese section that you already know looks perfect */
+.zh-section .zh-details-label {
   min-width: 60px;
 }
 
