@@ -505,7 +505,7 @@ body:has(dialog[open]) .wrapper {
   /* Card Containers */
   .invitation-card,
   .zh-section {
-    padding: 2rem 0.75rem;
+    padding: 2rem 0.5rem;
   }
 
   /* Details Block (Left-Aligned Full Width) */
