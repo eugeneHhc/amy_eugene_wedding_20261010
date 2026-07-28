@@ -512,9 +512,9 @@ body:has(dialog[open]) .wrapper {
   .zh-details-list,
   .invitation-card .zh-details-list {
     display: block;
+    margin-left: 0;     /* Forces the list to start at the left edge */
+    padding-left: 0;    /* Removes left offset */
     width: 100%;
-    max-width: 100%;
-    padding-left: 0.25rem;
   }
 
   .zh-details-item {
