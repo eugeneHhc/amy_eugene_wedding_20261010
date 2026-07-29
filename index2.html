@@ -20,7 +20,7 @@
                     <h2 class="zh-tagline">童話故事的新篇章...</h2>
 
                     <p class="zh-invite-text">
-                        Amy &amp; Eugene 誠意邀請您，<br>
+                        Amy & Eugene 誠意邀請您，<br>
                         一同前來分享我們的喜悅，<br>
                         見證我們互許終身的夢幻時刻。
                     </p>
@@ -101,6 +101,7 @@
                     var list = document.getElementById('messages');
                     var debugEl = document.getElementById('firebase-debug');
                     var STORAGE_KEY = 'guest_messages_v1';
+                    var SESSION_KEY = 'guest_session_id';
 
                     var ENABLE_FIREBASE = true;
                     var FIREBASE_CONFIG = {
@@ -113,6 +114,18 @@
                       appId: "1:1090930693469:web:19786a45013faa71bb04b4",
                       measurementId: "G-SYWGR84162"
                     };
+
+                    var sessionId = (function () {
+                      try {
+                        var existing = localStorage.getItem(SESSION_KEY);
+                        if (existing) return existing;
+                        var id = 'sess_' + Date.now() + '_' + Math.random().toString(36).slice(2, 10);
+                        localStorage.setItem(SESSION_KEY, id);
+                        return id;
+                      } catch (e) {
+                        return 'sess_anon_' + Math.random().toString(36).slice(2, 8);
+                      }
+                    })();
 
                     var isAdmin = (function () {
                         try {
@@ -127,6 +140,7 @@
 
                     var useFirebase = false;
                     var firebaseRef = null;
+                    var isEditing = false;
 
                     function tryInitWithDatabaseURL(dbUrl) {
                         try {
@@ -203,19 +217,120 @@
                         time.textContent = new Date(msg.ts).toLocaleString();
                         wrapper.appendChild(time);
 
-                        if (isAdmin) {
+                        var isMine = (msg.sessionId === sessionId);
+                        if (isMine) {
+                            var editBtn = document.createElement('button');
+                            editBtn.type = 'button';
+                            editBtn.className = 'edit-btn';
+                            editBtn.textContent = 'Edit';
+                            editBtn.onclick = function (ev) {
+                                ev.preventDefault();
+                                startEdit(wrapper, msg);
+                            };
+                            wrapper.appendChild(editBtn);
+
                             var del = document.createElement('button');
+                            del.type = 'button';
                             del.className = 'delete-btn';
                             del.textContent = 'Delete';
-                            del.setAttribute('aria-label', 'Delete message');
-                            del.addEventListener('click', function () {
+                            del.onclick = function (ev) {
+                                ev.preventDefault();
                                 if (!confirm('Delete this message? This action cannot be undone.')) return;
                                 deleteMessage(msg);
-                            });
+                            };
                             wrapper.appendChild(del);
                         }
 
                         list.appendChild(wrapper);
+                    }
+
+                    function startEdit(wrapper, msg) {
+                        var textEl = wrapper.querySelector('div');
+                        var timeEl = wrapper.querySelector('time');
+                        var currentText = msg.text;
+                        var key = msg.key;
+                        
+                        if (!textEl) return;
+
+                        var oldContainer = wrapper.querySelector('.edit-container');
+                        if (oldContainer) oldContainer.parentNode.removeChild(oldContainer);
+
+                        isEditing = true;
+                        document.getElementById('send').disabled = true;
+
+                        var container = document.createElement('div');
+                        container.className = 'edit-container';
+
+                        var textarea = document.createElement('textarea');
+                        textarea.className = 'edit-textarea';
+                        textarea.value = currentText;
+                        textarea.rows = Math.max(3, currentText.split('\n').length + 1);
+
+                        var actions = document.createElement('div');
+                        actions.className = 'edit-actions';
+
+                        var saveBtn = document.createElement('input');
+                        saveBtn.className = 'edit-save';
+                        saveBtn.value = 'Save';
+                        saveBtn.onclick = function (e) {
+                            e.preventDefault();
+                            e.stopPropagation();
+                            var ta = wrapper.querySelector('.edit-textarea');
+                            if (!ta) return;
+                            var newText = ta.value.trim();
+                            if (!newText) return;
+                            msg.text = newText;
+                            textEl.textContent = newText;
+                            textEl.style.display = 'block';
+                            if (timeEl) timeEl.style.display = 'block';
+                            wrapper.classList.remove('is-editing');
+                            isEditing = false;
+                            var submitBtn = document.getElementById('send');
+                            if (submitBtn) submitBtn.disabled = false;
+                            persist();
+                            if (useFirebase && firebaseRef && key) {
+                                firebaseRef.child(key).update({ text: newText }).catch(function () {});
+                            }
+                            if (container.parentNode) container.parentNode.removeChild(container);
+                        };
+
+                        var cancelBtn = document.createElement('input');
+                        cancelBtn.className = 'edit-cancel';
+                        cancelBtn.value = 'Cancel';
+                        cancelBtn.onclick = function (e) {
+                            e.preventDefault();
+                            e.stopPropagation();
+                            textarea.value = currentText;
+                            textEl.style.display = 'block';
+                            if (timeEl) timeEl.style.display = 'block';
+                            wrapper.classList.remove('is-editing');
+                            isEditing = false;
+                            var submitBtn2 = document.getElementById('send');
+                            if (submitBtn2) submitBtn2.disabled = false;
+                            if (container.parentNode) container.parentNode.removeChild(container);
+                        };
+
+                        textarea.onkeydown = function (ev) {
+                            if (ev.key === 'Enter' && (ev.ctrlKey || ev.metaKey)) {
+                                ev.preventDefault();
+                                saveBtn.onclick();
+                            }
+                        };
+
+                        actions.appendChild(saveBtn);
+                        actions.appendChild(cancelBtn);
+                        container.appendChild(textarea);
+                        container.appendChild(actions);
+
+                        wrapper.insertBefore(container, textEl);
+                        textEl.style.display = 'none';
+                        if (timeEl) timeEl.style.display = 'none';
+                        wrapper.classList.add('is-editing');
+                        
+                        setTimeout(function () {
+                            var ta = wrapper.querySelector('.edit-textarea');
+                            if (ta) ta.focus();
+                        }, 50);
                     }
 
                     (function renderInitial() {
@@ -223,32 +338,7 @@
                         if (!messages || !messages.length) return;
                         var frag = document.createDocumentFragment();
                         for (var i = 0; i < messages.length; i++) {
-                            var msg = messages[i];
-                            var wrapper = document.createElement('div');
-                            wrapper.className = 'message';
-                            wrapper.setAttribute('data-ts', msg.ts);
-
-                            var text = document.createElement('div');
-                            text.textContent = msg.text;
-                            wrapper.appendChild(text);
-
-                            var time = document.createElement('time');
-                            time.textContent = new Date(msg.ts).toLocaleString();
-                            wrapper.appendChild(time);
-
-                            if (isAdmin) {
-                                var del = document.createElement('button');
-                                del.className = 'delete-btn';
-                                del.textContent = 'Delete';
-                                del.setAttribute('aria-label', 'Delete message');
-                                (function(ts){ del.addEventListener('click', function () {
-                                    if (!confirm('Delete this message? This action cannot be undone.')) return;
-                                    deleteMessage({ ts: ts });
-                                }); })(msg.ts);
-                                wrapper.appendChild(del);
-                            }
-
-                            frag.appendChild(wrapper);
+                            appendMessage(messages[i]);
                         }
                         list.appendChild(frag);
                     })();
@@ -260,7 +350,7 @@
                             try {
                                 var val = snap.val();
                                 if (!val) return;
-                                var msg = { text: val.text, ts: val.ts || Date.now(), key: snap.key };
+                                var msg = { text: val.text, ts: val.ts || Date.now(), key: snap.key, sessionId: val.sessionId || '' };
                                 messages.push(msg);
                                 appendMessage(msg);
                             } catch (e) {
@@ -343,18 +433,24 @@
                     }
 
                     form.addEventListener('submit', function (ev) {
+                        if (isEditing) {
+                            ev.preventDefault();
+                            ev.stopPropagation();
+                            return;
+                        }
                         ev.preventDefault();
                         var text = textarea.value.trim();
                         if (!text) return;
 
-                        var msg = { text: text, ts: Date.now() };
+                        var msg = { text: text, ts: Date.now(), sessionId: sessionId };
 
                         if (useFirebase && firebaseRef) {
                             try {
                                 var newRef = firebaseRef.push();
-                                newRef.set(msg).then(function () {
+                                newRef.set({ text: msg.text, ts: msg.ts, sessionId: msg.sessionId }).then(function () {
                                 }).catch(function (e) {
                                     console.warn('Failed to write message to Firebase, falling back to localStorage', e);
+                                    msg.key = newRef.key;
                                     messages.push(msg);
                                     appendMessage(msg);
                                     persist();
@@ -387,4 +483,3 @@
 
 </body>
 </html>
-

@@ -33,6 +33,70 @@ button#send {
   font-size: 0.95rem;
 }
 
+.edit-btn {
+  background: transparent;
+  border: 1px solid rgba(61, 46, 28, 0.35);
+  color: #4A3222;
+  padding: 4px 10px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 0.85rem;
+  margin-right: 6px;
+}
+
+.edit-btn:hover {
+  background: rgba(61, 46, 28, 0.08);
+}
+
+.edit-textarea {
+  width: 100%;
+  min-height: 80px;
+  padding: 10px;
+  border-radius: 8px;
+  border: 1px solid rgba(61, 46, 28, 0.35);
+  font-size: 1rem;
+  color: #3D2E1C;
+  font-family: inherit;
+  resize: vertical;
+  margin-bottom: 8px;
+}
+
+.edit-container {
+  margin-bottom: 10px;
+}
+
+.edit-actions {
+  display: flex;
+  gap: 8px;
+  justify-content: flex-end;
+  margin-bottom: 8px;
+}
+
+.edit-save {
+  background: #4A3222;
+  color: white;
+  border: none;
+  padding: 6px 14px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 0.9rem;
+}
+
+.edit-cancel {
+  background: transparent;
+  color: #4A3222;
+  border: 1px solid rgba(61, 46, 28, 0.35);
+  padding: 6px 14px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 0.9rem;
+}
+
+.message.is-editing {
+  border-color: #B89762;
+  box-shadow: 0 0 0 2px rgba(184, 151, 98, 0.15);
+}
+
 .zh-tagline {
   font-size: 1.6rem;
   font-weight: 300;
