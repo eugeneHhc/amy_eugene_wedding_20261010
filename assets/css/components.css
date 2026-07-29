@@ -108,7 +108,7 @@
   margin: 0 0 0.25rem;
   font-size: 0.95rem;
   letter-spacing: 1px;
-  color: var(--text-muted);
+  color: rgba(61, 46, 28, 0.85);
   text-transform: uppercase;
 }
 
@@ -116,13 +116,14 @@
   text-transform: none;
   letter-spacing: 0.08em;
   margin-bottom: 0.75rem;
+  color: #3D2E1C;
 }
 
 .countdown-value {
   margin: 0;
   font-size: clamp(2rem, 4vw, 2.8rem);
   font-weight: 600;
-  color: var(--accent);
+  color: #4A3222;
   line-height: 1;
 }
 
@@ -223,13 +224,13 @@
 .rsvp-container h2 {
   margin-bottom: 8px;
   font-size: 1.6rem;
-  color: var(--accent);
+  color: #4A3222;
   font-weight: 300;
 }
 
 .rsvp-container p.lead {
   margin-bottom: 16px;
-  color: var(--text-muted);
+  color: #3D2E1C;
 }
 
 .guest-form {
@@ -247,14 +248,14 @@ textarea#gmsg {
   resize: vertical;
   padding: 12px;
   border-radius: 10px;
-  border: 1px solid var(--accent-light);
+  border: 1px solid rgba(61, 46, 28, 0.35);
   font-size: 1rem;
-  color: var(--text-main);
+  color: #3D2E1C;
   outline: none;
 }
 
 button#send {
-  background: var(--accent);
+  background: #4A3222;
   color: white;
   border: none;
   padding: 12px 18px;
@@ -390,20 +391,21 @@ body:has(dialog[open]) .wrapper {
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
   text-align: center;
   font-family: var(--font-serif-zh);
-  color: var(--color-text-main);
+  color: #3D2E1C;
   line-height: 1.8;
 }
 
 .zh-tagline {
   font-size: 1.2rem;
   letter-spacing: 0.08em;
-  color: var(--color-text-muted);
+  color: #3D2E1C;
   margin-bottom: 1rem;
 }
 
 .zh-invite-text {
   font-size: 1rem;
   letter-spacing: 0.04em;
+  color: #3D2E1C;
   margin-bottom: 1.5rem;
 }
 
@@ -422,20 +424,21 @@ body:has(dialog[open]) .wrapper {
 .zh-details-item {
   display: contents;
   font-size: 0.95rem;
+  color: #3D2E1C;
 }
 
 .zh-details-label {
   font-weight: 600;
-  color: var(--color-primary);
+  color: #3D2E1C;
   white-space: nowrap;
 }
 
 /* ===== Venue Link ===== */
 .venue-link {
-  color: var(--color-primary);
+  color: #4A3222;
   text-decoration: none;
   font-weight: 500;
-  border-bottom: 1px solid var(--color-accent);
+  border-bottom: 1px solid #B89762;
   padding-bottom: 2px;
   transition: all 0.2s ease;
   display: inline-block;
@@ -444,8 +447,8 @@ body:has(dialog[open]) .wrapper {
 }
 
 .venue-link:hover {
-  color: var(--color-accent);
-  border-bottom-color: var(--color-primary);
+  color: #3D2E1C;
+  border-bottom-color: #4A3222;
 }
 
 /* ===== Divider ===== */
