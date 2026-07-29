@@ -1,186 +1,139 @@
 (function () {
-  const imgEls = Array.from(document.querySelectorAll('.gallery-grid .photo-frame img'));
+  const container = document.querySelector('.gallery-stack');
+  const frontImg = container ? container.querySelector('.gallery-img-front') : null;
+  const backImg = container ? container.querySelector('.gallery-img-back') : null;
   const debugEl = document.getElementById('gallery-debug');
-  const BATCH_SIZE = 1;
   const INTERVAL_MS = 3000;
-  const PHOTO_FADE_MS = 180;
+  const CROSSFADE_MS = 1000;
   const photoPaths = (window.GALLERY_PHOTO_PATHS || []);
 
-  const totalBatches = Math.ceil(photoPaths.length / BATCH_SIZE);
-  let activeBatchIndex = 0;
+  let currentIndex = 0;
   let timer = null;
+  let swapping = false;
   const imageCache = new Map();
-
-  /* function logDebug(message, detail) {
-    const stamp = new Date().toLocaleTimeString('en-GB', { hour12: false });
-    const entry = '[' + stamp + '] ' + message;
-    console.log(entry, detail || '');
-    if (debugEl) {
-      debugEl.textContent = entry + (detail ? ' | ' + detail : '');
-    }
-  } */
-
-  function resetSlot(img) {
-    img.classList.remove('is-visible');
-    img.classList.add('is-hidden');
-    img.style.opacity = '0';
-    img.style.transform = 'scale(1.02)';
-    img.style.transition = 'opacity ' + PHOTO_FADE_MS + 'ms ease, transform ' + PHOTO_FADE_MS + 'ms ease';
-    img.dataset.state = 'hidden';
-  }
-
-  function showSlot(img) {
-    img.classList.remove('is-hidden');
-    img.classList.add('is-visible');
-    img.style.opacity = '1';
-    img.style.transform = 'scale(1)';
-    img.dataset.state = 'visible';
-  }
-
-  function showError(img, reason) {
-    img.classList.remove('is-visible');
-    img.classList.add('is-hidden');
-    img.style.opacity = '0';
-    img.style.transform = 'scale(1.02)';
-    img.alt = 'Image unavailable';
-    img.dataset.state = 'error';
-    //logDebug('gallery image failed', reason);
-  }
 
   function loadImage(src) {
     if (imageCache.has(src)) {
       return imageCache.get(src);
     }
-
-    const promise = new Promise((resolve, reject) => {
-      const loader = new Image();
+    const promise = new Promise(function (resolve, reject) {
+      var loader = new Image();
       loader.decoding = 'async';
-      loader.onload = function () {
-        resolve(loader);
-      };
-      loader.onerror = function () {
-        reject(new Error('failed:' + src));
-      };
+      loader.onload = function () { resolve(loader); };
+      loader.onerror = function () { reject(new Error('failed:' + src)); };
       loader.src = src;
     });
-
     imageCache.set(src, promise);
     return promise;
   }
 
-  function preloadBatch(batchIndex) {
-    const start = batchIndex * BATCH_SIZE;
-    const batchNumber = batchIndex + 1;
-    const items = [];
+  // Set an image element's src and fade it in
+  function setImageAndFadeIn(img, src, alt, callback) {
+    img.alt = alt || '';
+    img.style.opacity = '0';
+    img.style.transform = 'scale(1.05)';
+    img.src = src;
 
-    for (let i = 0; i < BATCH_SIZE; i++) {
-      const pos = start + i;
-      if (pos >= photoPaths.length) {
-        continue;
-      }
-      const src = photoPaths[pos];
-      const alt = 'Wedding photo ' + (pos + 1);
-      items.push({ slotIndex: i, src: src, alt: alt });
+    function onReady() {
+      // Force reflow so the hidden state paints before we transition
+      void img.offsetWidth;
+      img.style.transition = 'opacity ' + CROSSFADE_MS + 'ms ease-out, transform ' + CROSSFADE_MS + 'ms ease-out';
+      img.style.opacity = '1';
+      img.style.transform = 'scale(1)';
+      if (callback) setTimeout(callback, CROSSFADE_MS + 50);
     }
 
-    if (!items.length) {
-      return Promise.resolve([]);
+    if (img.complete && img.naturalWidth > 0) {
+      onReady();
+    } else {
+      img.onload = onReady;
+      img.onerror = function () {
+        img.alt = 'Image unavailable';
+        if (callback) callback();
+      };
     }
+  }
 
-    const startedAt = performance.now();
-    //logDebug('gallery preloading batch ' + batchNumber + ' of ' + totalBatches, items.map(function (item) { return item.src; }).join(' | '));
+  // Crossfade: fade front in, then swap layers
+  function crossfadeTo(src, alt) {
+    if (swapping) return;
+    swapping = true;
 
-    return Promise.all(items.map(function (item) {
-      return loadImage(item.src).then(function () {
-        return item;
-      });
-    })).then(function (results) {
-      const duration = Math.round(performance.now() - startedAt);
-      //logDebug('gallery batch ' + batchNumber + ' ready in ' + duration + 'ms', results.length + ' images');
-      return results;
+    var currentFront = frontImg;
+    var currentBack = backImg;
+
+    // Back layer shows the old image (already visible)
+    // Set the new image on the front layer (hidden), then fade it in
+    setImageAndFadeIn(currentFront, src, alt, function () {
+      // After fade completes, swap: make front the new back, and back the new front
+      // Keep front visible, set back to the same src (so it's ready for next swap)
+      currentBack.src = currentFront.src;
+      currentBack.alt = currentFront.alt;
+      currentBack.style.transition = 'none';
+      currentBack.style.opacity = '1';
+      currentBack.style.transform = 'scale(1)';
+
+      // Reset front to hidden state for next use
+      currentFront.style.transition = 'none';
+      currentFront.style.opacity = '0';
+      currentFront.style.transform = 'scale(1.05)';
+
+      swapping = false;
     });
   }
 
-  function applyBatch(batchIndex, batchNumber, preparedItems) {
-    const start = batchIndex * BATCH_SIZE;
-    const batchItems = preparedItems || [];
+  function showNext() {
+    if (!photoPaths.length || !frontImg || !backImg) return;
 
-    for (let i = 0; i < BATCH_SIZE; i++) {
-      const img = imgEls[i];
-      if (!img) {
-        continue;
-      }
+    var nextIndex = (currentIndex + 1) % photoPaths.length;
+    var src = photoPaths[nextIndex];
+    var alt = 'Wedding photo ' + (nextIndex + 1);
 
-      const pos = start + i;
-      if (pos >= photoPaths.length) {
-        resetSlot(img);
-        continue;
-      }
-
-      const item = batchItems[i] || null;
-      if (!item) {
-        resetSlot(img);
-        continue;
-      }
-
-      const src = item.src;
-      const alt = item.alt;
-      img.alt = alt;
-      img.loading = 'eager';
-      img.decoding = 'async';
-      img.style.transition = 'opacity ' + PHOTO_FADE_MS + 'ms ease, transform ' + PHOTO_FADE_MS + 'ms ease';
-
-      resetSlot(img);
-      img.src = src;
-
-      if (img.complete && img.naturalWidth > 0) {
-        window.requestAnimationFrame(function () {
-          showSlot(img);
-          //logDebug('gallery batch ' + batchNumber + ' slot ' + (i + 1) + ' revealed', src);
-        });
-      } else {
-        img.onload = function () {
-          window.requestAnimationFrame(function () {
-            showSlot(img);
-            //logDebug('gallery batch ' + batchNumber + ' slot ' + (i + 1) + ' revealed', src);
-          });
-        };
-        img.onerror = function () {
-          showError(img, 'src load error');
-        };
-      }
-    }
-
-    activeBatchIndex = batchIndex;
-  }
-
-  function renderBatch() {
-    if (!photoPaths.length) {
-      //logDebug('gallery has no photos configured', '');
-      return;
-    }
-
-    const nextBatchIndex = (activeBatchIndex + 1) % totalBatches;
-    const nextBatchNumber = nextBatchIndex + 1;
-
-    //logDebug('gallery switching to batch ' + nextBatchNumber + ' of ' + totalBatches, '');
-
-    preloadBatch(nextBatchIndex)
-      .then(function (preparedItems) {
-        applyBatch(nextBatchIndex, nextBatchNumber, preparedItems);
-      })
-      .catch(function (error) {
-        //logDebug('gallery batch preload failed', error && error.message ? error.message : error);
-      });
-  }
-
-  preloadBatch(activeBatchIndex)
-    .then(function (preparedItems) {
-      applyBatch(activeBatchIndex, 1, preparedItems);
-    })
-    .catch(function (error) {
-      //logDebug('gallery initial preload failed', error && error.message ? error.message : error);
+    // Preload then crossfade
+    loadImage(src).then(function () {
+      crossfadeTo(src, alt);
+      currentIndex = nextIndex;
+    }).catch(function () {
+      // skip on error
     });
+  }
 
-  timer = window.setInterval(renderBatch, INTERVAL_MS);
+  // Initialise: load first photo on both layers
+  function init() {
+    if (!photoPaths.length || !frontImg || !backImg) return;
+
+    var firstSrc = photoPaths[0];
+    var firstAlt = 'Wedding photo 1';
+
+    // Set back layer immediately (no transition)
+    backImg.style.transition = 'none';
+    backImg.style.opacity = '1';
+    backImg.style.transform = 'scale(1)';
+    backImg.alt = firstAlt;
+    backImg.src = firstSrc;
+
+    // Set front hidden with same src
+    frontImg.style.transition = 'none';
+    frontImg.style.opacity = '0';
+    frontImg.style.transform = 'scale(1.05)';
+    frontImg.alt = firstAlt;
+    frontImg.src = firstSrc;
+
+    // After preload, crossfade to second photo
+    if (photoPaths.length > 1) {
+      var secondSrc = photoPaths[1];
+      loadImage(secondSrc).then(function () {
+        // Wait a moment then show the second
+        setTimeout(function () {
+          crossfadeTo(secondSrc, 'Wedding photo 2');
+          currentIndex = 1;
+        }, 500);
+      });
+    }
+
+    // Start interval for subsequent swaps
+    timer = window.setInterval(showNext, INTERVAL_MS + CROSSFADE_MS + 200);
+  }
+
+  init();
 })();

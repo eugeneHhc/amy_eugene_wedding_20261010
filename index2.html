@@ -46,14 +46,14 @@
                 </div>
 
                 <div id="countdown" class="countdown-box" aria-live="polite">
-                    <p class="countdown-label">Days until the celebration</p>
                     <p class="countdown-label countdown-label--zh">距離慶典還有</p>
-                    <p class="countdown-value"><span id="countdown-days">0</span> days 天</p>
+                    <p class="countdown-value"><span id="countdown-days">0</span> 天</p>
                 </div>
                 <!-- ==================== SECTION 2: GALLERY / PHOTOS (from photos.html) ==================== -->
                 <section class="gallery-grid">
-                    <div class="photo-frame photo-frame--single">
-                        <img alt="Wedding photo" loading="lazy">
+                    <div class="photo-frame photo-frame--single gallery-stack">
+                        <img class="gallery-img gallery-img-front" alt="Wedding photo" loading="lazy">
+                        <img class="gallery-img gallery-img-back" alt="" loading="lazy" aria-hidden="true">
                     </div>
                 </section>
                 <div id="gallery-debug" class="gallery-debug" aria-live="polite" aria-atomic="true"></div>
