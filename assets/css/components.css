@@ -226,6 +226,7 @@
   font-size: 1.6rem;
   color: #4A3222;
   font-weight: 300;
+  font-family: var(--font-serif-zh);
 }
 
 .rsvp-container p.lead {
@@ -396,9 +397,11 @@ body:has(dialog[open]) .wrapper {
 }
 
 .zh-tagline {
-  font-size: 1.2rem;
+  font-size: 1.6rem;
+  font-weight: 300;
+  font-family: var(--font-serif-zh);
   letter-spacing: 0.08em;
-  color: #3D2E1C;
+  color: #4A3222;
   margin-bottom: 1rem;
 }
 

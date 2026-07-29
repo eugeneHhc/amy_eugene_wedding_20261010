@@ -14,7 +14,7 @@
 }
 
 .rsvp-container h2 {
-  font-size: 1.8rem;
+  font-size: 1.6rem;
 }
 
 textarea#gmsg {
@@ -34,7 +34,9 @@ button#send {
 }
 
 .zh-tagline {
-  font-size: 1.4rem;
+  font-size: 1.6rem;
+  font-weight: 300;
+  font-family: var(--font-serif-zh);
 }
 
 .zh-invite-text {
