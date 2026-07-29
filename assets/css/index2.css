@@ -1,0 +1,62 @@
+/*
+ * index2.html — enlarged styles for senior adult readability
+ * Overrides base font sizes while preserving layout and proportions
+ */
+
+/* ===== Section (zh) ===== */
+.zh-section {
+  font-size: 1.2rem;
+}
+
+/* ===== RSVP / Messages ===== */
+.rsvp-container {
+  font-size: 1.15rem;
+}
+
+.rsvp-container h2 {
+  font-size: 1.8rem;
+}
+
+textarea#gmsg {
+  font-size: 1.1rem;
+}
+
+button#send {
+  font-size: 1.1rem;
+}
+
+.message {
+  font-size: 1.1rem;
+}
+
+.message time {
+  font-size: 0.95rem;
+}
+
+.zh-tagline {
+  font-size: 1.4rem;
+}
+
+.zh-invite-text {
+  font-size: 1.2rem;
+}
+
+.zh-details-item {
+  font-size: 1.15rem;
+}
+
+.zh-details-list {
+  gap: 1rem 1.5rem;
+}
+
+.venue-link {
+  font-size: 1.15rem;
+}
+
+.countdown-label {
+  font-size: 1.1rem;
+}
+
+.countdown-value {
+  font-size: clamp(2.5rem, 5vw, 3.2rem);
+}
