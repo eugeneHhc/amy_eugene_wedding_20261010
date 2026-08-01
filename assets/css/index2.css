@@ -97,6 +97,16 @@ button#send {
   box-shadow: 0 0 0 2px rgba(184, 151, 98, 0.15);
 }
 
+.zh-section-logo {
+  display: block;
+  max-width: 100%;
+  width: clamp(80px, 15vw, 140px);
+  height: auto;
+  margin: 0 auto 1.5rem;
+  position: relative;
+  z-index: 2;
+}
+
 .zh-tagline {
   font-size: 1.6rem;
   font-weight: 300;
