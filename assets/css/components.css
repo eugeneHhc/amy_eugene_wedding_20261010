@@ -105,11 +105,13 @@
 }
 
 .countdown-label {
-  margin: 0 0 0.25rem;
+  margin: 0 0 1rem;
   font-size: 0.95rem;
+  font-weight: 600;
   letter-spacing: 1px;
   color: rgba(61, 46, 28, 0.85);
   text-transform: uppercase;
+  white-space: nowrap;
 }
 
 .countdown-label--zh {
