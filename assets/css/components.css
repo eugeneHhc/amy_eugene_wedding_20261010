@@ -342,10 +342,11 @@ body:has(dialog[open]) .wrapper {
 
 .tagline {
   font-family: var(--font-serif-en);
-  font-size: 1.25rem;
+  font-size: 1.5rem;
   font-style: italic;
-  color: var(--color-text-muted);
+  color: var(--color-text-main);
   margin-bottom: 1rem;
+  white-space: nowrap;
 }
 
 .couple-names-body {
