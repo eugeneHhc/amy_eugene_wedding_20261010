@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>L'Avis Royal & Livre d'Or</title>
+  
+  <!-- French Royal Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Alex+Brush&family=Cinzel+Decorative:wght@600;700&family=Cormorant+Garamond:ital,wght@0,500;1,400&display=swap" rel="stylesheet">
+  
+  <!-- Updated CSS Link -->
+  <link rel="stylesheet" href="assets/css/guestmessages.css" />
+  
+  <!-- GSAP for French Royal Animation -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+</head>
+<body>
+
+  <div class="royal-container">
+    <header class="royal-header">
+      <div class="fleur-de-lis-emblem">⚜</div>
+      <h1 class="title">Le Livre d'Or Royal</h1>
+      <p class="subtitle">Offer your royal blessings upon the Versailles Courtyard Board</p>
+    </header>
+
+    <main class="content-grid">
+      <!-- Royal Decree Form Scroll -->
+      <section class="royal-scroll-form">
+        <div class="gold-corner top-left"></div>
+        <div class="gold-corner top-right"></div>
+        <div class="gold-corner bottom-left"></div>
+        <div class="gold-corner bottom-right"></div>
+
+        <form id="guestbook-form">
+          <h2>Signer le Décret</h2>
+          
+          <label for="guest-name">Votre Nom & Titre</label>
+          <input type="text" id="guest-name" placeholder="e.g., Le Duc de Paris" required />
+
+          <label for="guest-message">Vœux & Bénédictions</label>
+          <textarea id="guest-message" rows="5" placeholder="Write your heartfelt wishes for the Bride and Groom..." required></textarea>
+
+          <button type="submit" id="submit-btn">
+            <span class="btn-symbol">⚜</span> Seal & Post Blessing
+          </button>
+        </form>
+      </section>
+
+      <!-- Gilded Royal Notice Board -->
+      <section class="gilded-board-frame">
+        <!-- Rococo Crest Header -->
+        <div class="rococo-crest">
+          <span class="crest-angel">👼</span>
+          <span class="royal-shield">⚜</span>
+          <span class="crest-angel">👼</span>
+        </div>
+        
+        <h2 class="board-title">Registre des Hommages</h2>
+        
+        <div class="notice-board" id="notice-board">
+          <!-- Default Pre-pinned Royal Letter -->
+          <div class="parchment-note default-note">
+            <div class="gold-wax-seal">⚜</div>
+            <p class="message">"Puisse votre amour régner avec grâce, beauté et éternité."</p>
+            <span class="author">— Sa Majesté le Roi & la Reine</span>
+          </div>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <!-- Updated JS Link -->
+  <script src="assets/js/guestmessages.js"></script>
+</body>
+</html>
