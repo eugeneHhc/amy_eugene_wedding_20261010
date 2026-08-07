@@ -7,15 +7,7 @@
   const messageInput = document.getElementById('guest-message');
   const messageGrid = document.getElementById('message-grid');
   const boardFormContainer = document.getElementById('board-form-container');
-  const closeBtn = document.getElementById('close-btn');
-
-  // Close button functionality
-  if (closeBtn && boardFormContainer) {
-    closeBtn.addEventListener('click', function() {
-      boardFormContainer.style.display = 'none';
-    });
-  }
-
+  
   // Make form draggable
   if (boardFormContainer) {
     let isDragging = false;
@@ -34,8 +26,6 @@
     document.addEventListener('touchend', dragEnd);
 
     function dragStart(e) {
-      if (e.target === closeBtn || closeBtn.contains(e.target)) return;
-      
       initialX = e.clientX || e.touches[0].clientX;
       initialY = e.clientY || e.touches[0].clientY;
       
@@ -77,6 +67,16 @@
     }
   }
 
+  // Click outside to collapse expanded messages
+  document.addEventListener('click', function(e) {
+    const expandedMessages = document.querySelectorAll('.board-message.expanded');
+    expandedMessages.forEach(function(msg) {
+      if (!msg.contains(e.target) && e.target !== boardFormContainer && !boardFormContainer.contains(e.target)) {
+        msg.classList.remove('expanded');
+      }
+    });
+  });
+
   // Form submission
   if (form) {
     form.addEventListener('submit', function(e) {
@@ -107,7 +107,8 @@
       `;
 
       // Add click to expand functionality
-      messageDiv.addEventListener('click', function() {
+      messageDiv.addEventListener('click', function(e) {
+        e.stopPropagation();
         this.classList.toggle('expanded');
       });
 
