@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
+  <title>The Royal Golden Book - Vertical Board</title>
+  
+  <!-- French Royal Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Alex+Brush&family=Cinzel+Decorative:wght@600;700&family=Cormorant+Garamond:ital,wght@0,500;1,400&display=swap" rel="stylesheet">
+  
+  <!-- Mobile-Optimized CSS -->
+  <link rel="stylesheet" href="assets/css/guestmessagesroyale.css" />
+  
+  <!-- GSAP for Royal Animation -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+</head>
+<body>
+  <div class="royal-container">
+    <main class="content-wrapper">
+      <!-- Vertical Board Display Section -->
+      <section class="vertical-board-section">
+        <div class="vertical-board-frame" id="vertical-board-frame">
+          <!-- Board Image -->
+          <img src="photos/vertical_board.png" alt="Vertical Board" class="board-image" />
+          
+          <div class="board-form-container" id="board-form-container">
+            <button class="close-btn" id="close-btn">&times;</button>
+            <form id="guestbook-form">
+              <h2>Sign the Decree</h2>
+              
+              <label for="guest-name">Your Name & Title</label>
+              <input type="text" id="guest-name" placeholder="e.g., Duke of Paris" required />
+
+              <label for="guest-message">Wishes & Blessings</label>
+              <textarea id="guest-message" rows="3" placeholder="Write your heartfelt wishes..." required></textarea>
+
+              <button type="submit" id="submit-btn">
+                <span class="btn-symbol">⚜</span> Seal & Post Blessing
+              </button>
+            </form>
+          </div>
+
+          <!-- Message Grid Area -->
+          <div class="message-grid-area" id="message-grid-area">
+            <div class="message-grid" id="message-grid">
+              <!-- Messages will be added here dynamically -->
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <!-- New Royal Board Logic -->
+  <script src="assets/js/guestmessagesroyale.js"></script>
+</body>
+</html>
