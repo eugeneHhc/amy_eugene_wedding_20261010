@@ -9,9 +9,10 @@
   margin-top: 0;
 }
 
-/* Remove top spacing for index2 page */
+/* Remove top and bottom spacing for index2 page */
 .main-content .wrapper {
   padding-top: 0;
+  padding-bottom: 0;
 }
 
 /* ===== RSVP / Messages ===== */

@@ -90,8 +90,8 @@
 /* ===== Countdown Box ===== */
 .countdown-box {
   max-width: 680px;
-  margin: 2rem auto;
-  padding: 1.5rem 1rem;
+  margin: 0.125rem auto 0.125rem;
+  padding: 1rem 1rem;
   border-radius: 18px;
   border: 1px solid rgba(75, 97, 120, 0.12);
   background-color: rgba(255, 255, 255, 0.78);
@@ -139,7 +139,7 @@
   display: grid;
   grid-template-columns: 1fr;
   gap: 24px;
-  margin: 2rem auto 2rem;
+  margin: 0.125rem auto 0.125rem;
   max-width: 680px;
 }
 
@@ -196,6 +196,7 @@
 }
 
 .gallery-debug {
+  display: none;
   margin: 0;
   font-size: 0.8rem;
   color: var(--text-muted);
@@ -212,7 +213,7 @@
   border: 1px solid rgba(75, 97, 120, 0.08);
   position: relative;
   text-align: center;
-  margin: 0 auto clamp(2rem, 6vw, 3rem);
+  margin: 0.125rem auto;
   max-width: 680px;
 }
 
@@ -383,7 +384,7 @@ body:has(dialog[open]) .wrapper {
 /* ===== Chinese Section (zh) ===== */
 .zh-section {
   max-width: 680px;
-  margin: 2rem auto;
+  margin: 0.125rem auto 0.125rem;
   padding: 3.5rem 2.5rem;
   background-color: #FAFAFA;
   background-image: url('../../photos/background2.jpeg');
@@ -465,4 +466,35 @@ body:has(dialog[open]) .wrapper {
   opacity: 0.5;
   margin: 2.5rem auto;
   width: 80%;
+}
+
+/* ===== Page Divider Image ===== */
+.page-divider {
+  position: relative;
+  max-width: 100%;
+  margin: 0.125rem auto 0.125rem;
+  overflow: hidden;
+  border-radius: var(--radius);
+}
+
+.page-divider .divider-image {
+  display: block;
+  width: 100%;
+  height: auto;
+  max-width: 100%;
+  object-fit: cover;
+  border-radius: var(--radius);
+}
+
+.page-divider .divider-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(255, 255, 255, 0.65);
+  pointer-events: none;
+  border-radius: var(--radius);
+}
+
 }
