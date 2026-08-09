@@ -6,6 +6,12 @@
 /* ===== Section (zh) ===== */
 .zh-section {
   font-size: 1.2rem;
+  margin-top: 0;
+}
+
+/* Remove top spacing for index2 page */
+.main-content .wrapper {
+  padding-top: 0;
 }
 
 /* ===== RSVP / Messages ===== */
