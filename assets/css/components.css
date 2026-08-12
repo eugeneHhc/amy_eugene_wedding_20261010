@@ -422,10 +422,12 @@ body:has(dialog[open]) .wrapper {
   margin: 0.125rem auto 0.125rem;
   padding: 3.5rem 2.5rem;
   background-color: #FAFAFA;
-  background-image: url('https://lh3.googleusercontent.com/d/1Ieompsett2URqbIPD9vkN4ps451S4eHd');
-  background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
+  background-image:
+    linear-gradient(rgba(255, 255, 255, 0.78), rgba(255, 255, 255, 0.78)),
+    url('https://lh3.googleusercontent.com/d/1AS1obOi2VtXoEZRS86J9d6nA5i8o528m');
+  background-size: cover, cover;
+  background-position: center, center;
+  background-repeat: no-repeat, no-repeat;
   min-height: 300px;
   border-radius: 16px;
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
