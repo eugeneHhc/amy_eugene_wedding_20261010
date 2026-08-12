@@ -143,3 +143,16 @@ button#send {
 .countdown-value {
   font-size: clamp(2.5rem, 5vw, 3.2rem);
 }
+
+/* ===== Highlights Section ===== */
+.zh-highlights {
+  font-size: 1.2rem;
+}
+
+.zh-highlights .zh-tagline {
+  font-size: 1.6rem;
+}
+
+.zh-highlights-list li {
+  font-size: 1.15rem;
+}

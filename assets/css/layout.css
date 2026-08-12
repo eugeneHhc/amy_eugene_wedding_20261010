@@ -168,6 +168,10 @@
     padding: 2rem 0.5rem;
   }
 
+  .zh-highlights {
+    padding: 2rem 0.5rem;
+  }
+
   .zh-details-list,
   .invitation-card .zh-details-list {
     display: grid;

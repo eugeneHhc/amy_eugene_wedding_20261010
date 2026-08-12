@@ -416,6 +416,58 @@ body:has(dialog[open]) .wrapper {
   margin-bottom: 1.5rem;
 }
 
+/* ===== Highlights Section ===== */
+.zh-highlights {
+  max-width: 680px;
+  margin: 0.125rem auto 0.125rem;
+  padding: 3.5rem 2.5rem;
+  background-color: #FAFAFA;
+  background-image: url('https://lh3.googleusercontent.com/d/1Ieompsett2URqbIPD9vkN4ps451S4eHd');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  min-height: 300px;
+  border-radius: 16px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+  text-align: center;
+  font-family: var(--font-serif-zh);
+  color: #3D2E1C;
+  line-height: 1.8;
+}
+
+.zh-highlights .zh-tagline {
+  margin-bottom: 1.5rem;
+}
+
+.zh-highlights-list {
+  list-style: none;
+  padding: 0;
+  margin: 0 auto;
+  max-width: 480px;
+  text-align: left;
+}
+
+.zh-highlights-list li {
+  font-family: var(--font-sans-en);
+  font-size: 1rem;
+  color: #3D2E1C;
+  padding: 0.3rem 0 0.3rem 1.5rem;
+  position: relative;
+  line-height: 1.6;
+}
+
+.zh-highlights-list li:before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background-color: var(--color-accent, #B89762);
+}
+
 /* ===== Details List (shared by EN and ZH) ===== */
 .zh-details-list {
   display: grid;
