@@ -156,3 +156,21 @@ button#send {
 .zh-highlights-list li {
   font-size: 1.15rem;
 }
+
+/* ============================================================
+   Layout polish (per review)
+   ============================================================ */
+
+/* 1) Tagline "歡慶美點與精彩時光": keep near the top of the
+      section background image (still horizontally centered). */
+.zh-highlights {
+  padding-top: 1.5rem;
+}
+
+/* 2) Countdown label "距離慶典還有": use the same font, size and
+      weight as the highlights tagline ("歡慶美點與精彩時光"). */
+.countdown-label--zh {
+  font-family: var(--font-serif-zh);
+  font-size: 1.6rem;
+  font-weight: 300;
+}
