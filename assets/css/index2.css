@@ -187,3 +187,17 @@ button#send {
 .page-divider {
   margin: 1rem auto 1rem;
 }
+
+/* 5) Highlights list items: remove the bullet dots and centre the
+      text alignment. */
+.zh-highlights-list {
+  text-align: center;
+}
+
+.zh-highlights-list li {
+  padding-left: 0;
+}
+
+.zh-highlights-list li::before {
+  display: none;
+}
