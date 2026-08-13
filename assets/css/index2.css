@@ -181,3 +181,9 @@ button#send {
 .zh-highlights-list {
   margin-top: 1.5rem;
 }
+
+/* 4) Page divider images: add breathing room above and below so they
+      don't sit too close to neighbouring components. */
+.page-divider {
+  margin: 1rem auto 1rem;
+}
