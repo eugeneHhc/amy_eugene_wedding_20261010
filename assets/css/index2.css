@@ -201,3 +201,13 @@ button#send {
 .zh-highlights-list li::before {
   display: none;
 }
+
+/* ===== Text-decor icons (flanking "雞尾酒會小食") =====
+   List items are 1.15rem; 0.9em keeps the icons slightly smaller than
+   the text and lets them scale together with the font. */
+.zh-deco-icon {
+  height: 0.9em;
+  width: auto;
+  vertical-align: middle;
+  margin: 0 0.3em;
+}
