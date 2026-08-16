@@ -470,6 +470,36 @@ body:has(dialog[open]) .wrapper {
   background-color: var(--color-accent, #B89762);
 }
 
+/* ===== Highlights list sizing & centring (shared so index.html looks
+   the same as index2.html) ===== */
+.zh-highlights {
+  font-size: 1.2rem;
+  padding-top: 0.25rem;
+}
+
+.zh-highlights-list {
+  margin-top: 1.5rem;
+  text-align: center;
+}
+
+.zh-highlights-list li {
+  font-size: 1.25rem;
+  padding-left: 0;
+}
+
+.zh-highlights-list li::before {
+  display: none;
+}
+
+/* Text-decor icons (flanking the highlight items): 0.9em keeps the icons
+   slightly smaller than the 1.25rem list text and lets them scale with it. */
+.zh-deco-icon {
+  height: 0.9em;
+  width: auto;
+  vertical-align: middle;
+  margin: 0 0.3em;
+}
+
 /* ===== Details List (shared by EN and ZH) ===== */
 .zh-details-list {
   display: grid;
