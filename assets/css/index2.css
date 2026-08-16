@@ -5,7 +5,7 @@
 
 /* ===== Section (zh) ===== */
 .zh-section {
-  font-size: 1.2rem;
+  font-size: 1.3rem;
   margin-top: 0;
 }
 
@@ -121,11 +121,11 @@ button#send {
 }
 
 .zh-invite-text {
-  font-size: 1.2rem;
+  font-size: 1.3rem;
 }
 
 .zh-details-item {
-  font-size: 1.15rem;
+  font-size: 1.25rem;
 }
 
 .zh-details-list {
@@ -133,7 +133,7 @@ button#send {
 }
 
 .venue-link {
-  font-size: 1.15rem;
+  font-size: 1.25rem;
 }
 
 .countdown-label {
