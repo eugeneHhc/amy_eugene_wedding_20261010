@@ -113,6 +113,12 @@
   min-width: 0;
 }
 
+/* Remove top spacing so the invitation card sits right below the top bar
+   (mirrors the index2 page's behaviour). */
+.main-content .wrapper {
+  padding-top: 0;
+}
+
 @media (max-width: 680px) {
   .page-layout {
     flex-direction: column;
