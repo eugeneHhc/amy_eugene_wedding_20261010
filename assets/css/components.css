@@ -451,10 +451,11 @@ body:has(dialog[open]) .wrapper {
 
 .zh-highlights-list li {
   font-family: var(--font-serif-zh);
-  font-size: 0.8rem;
+  font-size: 1.25rem;
   color: #3D2E1C;
   padding: 0.3rem 0 0.3rem 1.5rem;
   position: relative;
+  white-space: nowrap;
   line-height: 1.6;
 }
 
@@ -483,8 +484,9 @@ body:has(dialog[open]) .wrapper {
 }
 
 .zh-highlights-list li {
-  font-size: 0.8rem;
+  font-size: 1.25rem;
   padding-left: 0;
+  white-space: nowrap;
 }
 
 .zh-highlights-list li::before {
