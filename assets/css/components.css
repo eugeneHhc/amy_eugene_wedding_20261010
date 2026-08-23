@@ -580,6 +580,17 @@ body:has(dialog[open]) .wrapper {
   border-radius: var(--radius);
 }
 
+/* Video variant of the page divider: behaves exactly like the divider
+   image but plays a looping clip. Scales fluidly to any screen width. */
+.page-divider .divider-video {
+  display: block;
+  width: 100%;
+  height: auto;
+  max-width: 100%;
+  object-fit: cover;
+  border-radius: var(--radius);
+}
+
 .page-divider .divider-overlay {
   position: absolute;
   top: 0;
