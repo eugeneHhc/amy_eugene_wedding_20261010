@@ -66,10 +66,39 @@
   letter-spacing: 0.08em;
   display: flex;
   align-items: center;
+  gap: 0.6rem;
 }
 
 .sidebar-brand:hover {
   color: var(--color-accent, #B89762);
+}
+
+/* Monogram mark shown in the sidebar brand (desktop) and the mobile
+   top bar next to the hamburger button. */
+.sidebar-brand .brand-mark {
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  background: #ffffff;
+  border: 1px solid rgba(184, 151, 98, 0.55);
+  box-shadow: 0 2px 8px rgba(47, 66, 89, 0.08);
+  padding: 2px;
+  object-fit: contain;
+  display: block;
+}
+
+.sidebar-brand .brand-name {
+  font-family: var(--font-serif-en, 'Cormorant Garamond', serif);
+  font-size: 1.15rem;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  color: #4A3222;
+  white-space: nowrap;
+}
+
+.sidebar-brand .brand-amp {
+  color: var(--color-accent, #B89762);
+  font-style: italic;
 }
 
 .sidebar-logo {
@@ -139,13 +168,30 @@
     align-items: center;
     padding: 0.75rem 1rem;
     border-right: none;
-    border-bottom: 1px solid rgba(75, 97, 120, 0.08);
+    /* Soft gold underline to match the wedding accent palette */
+    border-bottom: 1px solid rgba(184, 151, 98, 0.35);
     gap: 0;
   }
 
   .nav-toggle {
     display: flex;
     margin-left: auto;
+  }
+
+  /* Compact brand (monogram + wordmark) filling the blank space to the
+     left of the hamburger button in the mobile top bar. */
+  .sidebar-brand {
+    gap: 0.5rem;
+    min-width: 0;
+  }
+
+  .sidebar-brand .brand-mark {
+    width: 34px;
+    height: 34px;
+  }
+
+  .sidebar-brand .brand-name {
+    font-size: 1.05rem;
   }
 
   .sidebar-links {
