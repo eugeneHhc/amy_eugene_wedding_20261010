@@ -7,6 +7,10 @@
 .zh-section {
   font-size: 1.3rem;
   margin-top: 0;
+  /* Tighten the top padding so the logo sits right near the top
+     edge of the section while still remaining inside its boundary
+     (overrides 3.5rem desktop / 2rem mobile base paddings). */
+  padding-top: 0.75rem;
 }
 
 /* Remove top and bottom spacing for index2 page */
@@ -109,6 +113,9 @@ button#send {
   max-width: 100%;
   width: clamp(80px, 15vw, 140px);
   height: auto;
+  /* No extra offset needed: the section's tightened padding-top
+     (0.75rem) already places the logo just below the top edge,
+     always inside the section's boundary. */
   margin: 0 auto 1.5rem;
   position: relative;
   z-index: 2;

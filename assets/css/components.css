@@ -383,14 +383,22 @@ body:has(dialog[open]) .wrapper {
 
 /* ===== Chinese Section (zh) ===== */
 .zh-section {
+  width: 100%;
   max-width: 680px;
   margin: 0.125rem auto 0.125rem;
   padding: 3.5rem 2.5rem;
   background-color: #FAFAFA;
   background-image: url('../../photos/background2.jpeg');
-  background-size: cover;
+  /* Render the entire background image (no cropping) ... */
+  background-size: contain;
   background-position: center;
   background-repeat: no-repeat;
+  /* ... and let the section adopt the image's native aspect ratio
+     (1366 x 2048), so it scales proportionally with the device
+     screen resolution/width. Content can still grow the box if
+     needed (automatic minimum size), so text is never clipped. */
+  aspect-ratio: 1366 / 2048;
+  height: auto;
   min-height: 300px;
   border-radius: 16px;
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
@@ -479,12 +487,12 @@ body:has(dialog[open]) .wrapper {
 }
 
 .zh-highlights-list {
-  margin-top: 1.5rem;
+  margin-top: 1.25rem;
   text-align: center;
 }
 
 .zh-highlights-list li {
-  font-size: 1.25rem;
+  font-size: 1.5rem;
   padding-left: 0;
   white-space: nowrap;
 }

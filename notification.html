@@ -1,0 +1,478 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <meta name="robots" content="noindex, nofollow">
+    
+    <title>Amy & Eugene | Wedding Celebration at Hong Kong Disneyland Hotel</title>
+    <link rel="stylesheet" href="assets/css/styles.css">
+    <link rel="stylesheet" href="assets/css/index2.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=Montserrat:wght@400;500;600&family=Noto+Serif+TC:wght@400;600&display=swap" rel="stylesheet">
+</head>
+<body>
+    <main class="main-content">
+            <div class="wrapper">
+                <div class="page-divider">
+                    <img src="photos/pd2_2_transparent.png" alt="Wedding moment" class="divider-image" loading="lazy">
+                </div>
+
+                <div class="zh-section">
+                    <img class="zh-section-logo" src="photos/transparent_logo.png" alt="Amy & Eugene Wedding Logo">
+
+                    <p class="zh-invite-text">
+                        親愛的親友們，<br>
+                        我們快要步入人生的新階段了，<br>
+                        與您分享我們的喜悅，<br>
+                        祝福大家一切幸福平安。<br>
+                    </p>
+
+                </div>
+
+                <!-- Page Divider Image -->
+                <div class="page-divider">
+                    <img src="photos/pd2_2_transparent.png" alt="Wedding moment" class="divider-image" loading="lazy">
+                </div>
+                <!-- ==================== SECTION 2: GALLERY / PHOTOS (from photos.html) ==================== -->
+                <section class="gallery-grid">
+                    <div class="photo-frame photo-frame--single gallery-stack">
+                        <img class="gallery-img gallery-img-front" alt="Wedding photo" loading="lazy">
+                        <img class="gallery-img gallery-img-back" alt="" loading="lazy" aria-hidden="true">
+                    </div>
+                </section>
+                <div id="gallery-debug" class="gallery-debug" aria-live="polite" aria-atomic="true"></div>
+                <!-- Page Divider Image -->
+                <div class="page-divider">
+                    <img src="photos/pd2_2_transparent.png" alt="Wedding moment" class="divider-image" loading="lazy">
+                </div>
+                <!-- ==================== SECTION 3: MESSAGES (from messages.html) ==================== -->
+                <section id="guest-messages" class="rsvp-container">
+                    <h2 class="zh-tagline">給新人的珍摯祝福</h2>
+                    <form id="guestForm" class="guest-form" action="#" method="post" novalidate>
+                        <textarea id="gmsg" name="message" placeholder="寫下您的祝福..." maxlength="1000" required aria-label="Message for newlyweds"></textarea>
+                        <div>
+                            <button id="send" type="submit">送出</button>
+                        </div>
+                    </form>
+
+                    <div class="messages" id="messages" aria-live="polite" aria-atomic="true"></div>
+                    <div id="firebase-debug" style="margin-top:12px;font-size:0.92rem;color:#555"></div>
+                </section>
+                <div class="page-divider">
+                    <img src="photos/pd2_2_transparent.png" alt="Wedding moment" class="divider-image" loading="lazy">
+                </div>
+            </div>
+
+            <script>
+                (function() {
+                    var countdownEl = document.getElementById('countdown-days');
+                    var targetDate = new Date('2026-10-10T13:00:00');
+
+                    function updateCountdown() {
+                        if (!countdownEl) return;
+                        var now = new Date();
+                        var diff = targetDate - now;
+                        var days = diff > 0 ? Math.ceil(diff / 86400000) : 0;
+                        countdownEl.textContent = days;
+                    }
+
+                    updateCountdown();
+                    setInterval(updateCountdown, 3600000);
+                })();
+            </script>
+            <script src="assets/js/gallery-config.js"></script>
+            <script src="assets/js/main.js"></script>
+            <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
+            <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-database-compat.js"></script>
+            <script>
+                (function () {
+                    var form = document.getElementById('guestForm');
+                    var textarea = document.getElementById('gmsg');
+                    var list = document.getElementById('messages');
+                    var debugEl = document.getElementById('firebase-debug');
+                    var STORAGE_KEY = 'guest_messages_v1';
+                    var SESSION_KEY = 'guest_session_id';
+
+                    var ENABLE_FIREBASE = true;
+                    var FIREBASE_CONFIG = {
+                      apiKey: "AIzaSyC0DG1KO2QQpGRckTFDlZLJHP14dOOhGNY",
+                      authDomain: "amyeugenewedding20261010.firebaseapp.com",
+                      databaseURL: "https://amyeugenewedding20261010-default-rtdb.asia-southeast1.firebasedatabase.app",
+                      projectId: "amyeugenewedding20261010",
+                      storageBucket: "amyeugenewedding20261010.firebasestorage.app",
+                      messagingSenderId: "1090930693469",
+                      appId: "1:1090930693469:web:19786a45013faa71bb04b4",
+                      measurementId: "G-SYWGR84162"
+                    };
+
+                    var sessionId = (function () {
+                      try {
+                        var existing = localStorage.getItem(SESSION_KEY);
+                        if (existing) return existing;
+                        var id = 'sess_' + Date.now() + '_' + Math.random().toString(36).slice(2, 10);
+                        localStorage.setItem(SESSION_KEY, id);
+                        return id;
+                      } catch (e) {
+                        return 'sess_anon_' + Math.random().toString(36).slice(2, 8);
+                      }
+                    })();
+
+                    var isAdmin = (function () {
+                        try {
+                            var params = new URLSearchParams(window.location.search);
+                            var v = params.get('admin');
+                            if (v === '1' || v === 'true') return true;
+                            return false;
+                        } catch (e) {
+                            return false;
+                        }
+                    })();
+
+                    var useFirebase = false;
+                    var firebaseRef = null;
+                    var isEditing = false;
+
+                    function tryInitWithDatabaseURL(dbUrl) {
+                        try {
+                            if (window.firebase && firebase.apps && firebase.apps.length) {
+                                try {
+                                    firebase.apps.forEach(function (a) {
+                                        try { a.delete(); } catch (e) { /* ignore */ }
+                                    });
+                                } catch (e) { /* ignore */ }
+                            }
+                            FIREBASE_CONFIG.databaseURL = dbUrl;
+                            firebase.initializeApp(FIREBASE_CONFIG);
+                            var db = firebase.database();
+                            firebaseRef = db.ref('/guest_messages_v1');
+                            useFirebase = true;
+                            return true;
+                        } catch (e) {
+                            try { useFirebase = false; } catch (_) {}
+                            return false;
+                        }
+                    }
+
+                    try {
+                        if (ENABLE_FIREBASE && window.firebase && FIREBASE_CONFIG && FIREBASE_CONFIG.databaseURL) {
+                            if (!tryInitWithDatabaseURL(FIREBASE_CONFIG.databaseURL)) {
+                                var pid = FIREBASE_CONFIG.projectId || '';
+                                var candidates = [];
+                                if (pid) {
+                                    candidates.push('https://' + pid + '.firebaseio.com');
+                                    candidates.push('https://' + pid + '-default-rtdb.firebaseio.com');
+                                    candidates.push('https://' + pid + '.firebasedatabase.app');
+                                }
+                                candidates.push('https://' + (FIREBASE_CONFIG.databaseURL || '').replace(/^https?:\/\//, ''));
+
+                                for (var i = 0; i < candidates.length; i++) {
+                                    var c = candidates[i];
+                                    if (!c) continue;
+                                    if (tryInitWithDatabaseURL(c)) break;
+                                }
+                            }
+                        }
+                    } catch (e) {
+                        console.error('[guest-messages] Firebase init failed', e);
+                        useFirebase = false;
+                    }
+
+                    var messages = [];
+
+                    if (!useFirebase) {
+                        try {
+                            var raw = localStorage.getItem(STORAGE_KEY);
+                            if (raw) messages = JSON.parse(raw);
+                        } catch (e) {
+                            console.warn('Failed to read guest messages from localStorage', e);
+                            try { localStorage.removeItem(STORAGE_KEY); } catch (ignored) {}
+                            messages = [];
+                        }
+                    }
+
+                    function appendMessage(msg) {
+                        var wrapper = document.createElement('div');
+                        wrapper.className = 'message';
+                        if (msg.key) {
+                            wrapper.setAttribute('data-key', msg.key);
+                        } else {
+                            wrapper.setAttribute('data-ts', msg.ts);
+                        }
+
+                        var text = document.createElement('div');
+                        text.textContent = msg.text;
+                        wrapper.appendChild(text);
+
+                        var time = document.createElement('time');
+                        time.textContent = new Date(msg.ts).toLocaleString();
+                        wrapper.appendChild(time);
+
+                        var isMine = (msg.sessionId === sessionId);
+                        if (isMine) {
+                            var editBtn = document.createElement('button');
+                            editBtn.type = 'button';
+                            editBtn.className = 'edit-btn';
+                            editBtn.textContent = 'Edit';
+                            editBtn.onclick = function (ev) {
+                                ev.preventDefault();
+                                startEdit(wrapper, msg);
+                            };
+                            wrapper.appendChild(editBtn);
+
+                            var del = document.createElement('button');
+                            del.type = 'button';
+                            del.className = 'delete-btn';
+                            del.textContent = 'Delete';
+                            del.onclick = function (ev) {
+                                ev.preventDefault();
+                                if (!confirm('Delete this message? This action cannot be undone.')) return;
+                                deleteMessage(msg);
+                            };
+                            wrapper.appendChild(del);
+                        }
+
+                        list.appendChild(wrapper);
+                    }
+
+                    function startEdit(wrapper, msg) {
+                        var textEl = wrapper.querySelector('div');
+                        var timeEl = wrapper.querySelector('time');
+                        var currentText = msg.text;
+                        var key = msg.key;
+                        
+                        if (!textEl) return;
+
+                        var oldContainer = wrapper.querySelector('.edit-container');
+                        if (oldContainer) oldContainer.parentNode.removeChild(oldContainer);
+
+                        isEditing = true;
+                        document.getElementById('send').disabled = true;
+
+                        var container = document.createElement('div');
+                        container.className = 'edit-container';
+
+                        var textarea = document.createElement('textarea');
+                        textarea.className = 'edit-textarea';
+                        textarea.value = currentText;
+                        textarea.rows = Math.max(3, currentText.split('\n').length + 1);
+
+                        var actions = document.createElement('div');
+                        actions.className = 'edit-actions';
+
+                        var saveBtn = document.createElement('input');
+                        saveBtn.className = 'edit-save';
+                        saveBtn.value = 'Save';
+                        saveBtn.onclick = function (e) {
+                            e.preventDefault();
+                            e.stopPropagation();
+                            var ta = wrapper.querySelector('.edit-textarea');
+                            if (!ta) return;
+                            var newText = ta.value.trim();
+                            if (!newText) return;
+                            msg.text = newText;
+                            textEl.textContent = newText;
+                            textEl.style.display = 'block';
+                            if (timeEl) timeEl.style.display = 'block';
+                            wrapper.classList.remove('is-editing');
+                            isEditing = false;
+                            var submitBtn = document.getElementById('send');
+                            if (submitBtn) submitBtn.disabled = false;
+                            persist();
+                            if (useFirebase && firebaseRef && key) {
+                                firebaseRef.child(key).update({ text: newText }).catch(function () {});
+                            }
+                            if (container.parentNode) container.parentNode.removeChild(container);
+                        };
+
+                        var cancelBtn = document.createElement('input');
+                        cancelBtn.className = 'edit-cancel';
+                        cancelBtn.value = 'Cancel';
+                        cancelBtn.onclick = function (e) {
+                            e.preventDefault();
+                            e.stopPropagation();
+                            textarea.value = currentText;
+                            textEl.style.display = 'block';
+                            if (timeEl) timeEl.style.display = 'block';
+                            wrapper.classList.remove('is-editing');
+                            isEditing = false;
+                            var submitBtn2 = document.getElementById('send');
+                            if (submitBtn2) submitBtn2.disabled = false;
+                            if (container.parentNode) container.parentNode.removeChild(container);
+                        };
+
+                        textarea.onkeydown = function (ev) {
+                            if (ev.key === 'Enter' && (ev.ctrlKey || ev.metaKey)) {
+                                ev.preventDefault();
+                                saveBtn.onclick();
+                            }
+                        };
+
+                        actions.appendChild(saveBtn);
+                        actions.appendChild(cancelBtn);
+                        container.appendChild(textarea);
+                        container.appendChild(actions);
+
+                        wrapper.insertBefore(container, textEl);
+                        textEl.style.display = 'none';
+                        if (timeEl) timeEl.style.display = 'none';
+                        wrapper.classList.add('is-editing');
+                        
+                        setTimeout(function () {
+                            var ta = wrapper.querySelector('.edit-textarea');
+                            if (ta) ta.focus();
+                        }, 50);
+                    }
+
+                    (function renderInitial() {
+                        if (useFirebase) return;
+                        if (!messages || !messages.length) return;
+                        var frag = document.createDocumentFragment();
+                        for (var i = 0; i < messages.length; i++) {
+                            appendMessage(messages[i]);
+                        }
+                        list.appendChild(frag);
+                    })();
+
+                    if (useFirebase && firebaseRef) {
+                        messages = [];
+
+                        firebaseRef.on('child_added', function (snap) {
+                            try {
+                                var val = snap.val();
+                                if (!val) return;
+                                var msg = { text: val.text, ts: val.ts || Date.now(), key: snap.key, sessionId: val.sessionId || '' };
+                                messages.push(msg);
+                                appendMessage(msg);
+                            } catch (e) {
+                                console.error('[guest-messages] error in child_added handler', e);
+                            }
+                        }, function (err) {
+                            console.error('[guest-messages] Firebase child_added listener failed', err);
+                        });
+
+                        firebaseRef.on('child_removed', function (snap) {
+                            try {
+                                var key = snap.key;
+                                for (var i = 0; i < messages.length; i++) {
+                                    if (messages[i].key === key) {
+                                        messages.splice(i, 1);
+                                        break;
+                                    }
+                                }
+                                var node = list.querySelector('[data-key="' + key + '"]');
+                                if (node) node.remove();
+                            } catch (e) {
+                                console.error('[guest-messages] error in child_removed handler', e);
+                            }
+                        }, function (err) {
+                            console.error('[guest-messages] Firebase child_removed listener failed', err);
+                        });
+
+                        try {
+                            var conRef = firebase.database().ref('.info/connected');
+                            conRef.on('value', function(snap) {
+                                var connected = snap.val() === true;
+                            });
+                        } catch (e) {}
+                    }
+
+                    var saveTimer = null;
+                    function persist() {
+                        if (useFirebase) return;
+                        if (saveTimer) return;
+                        saveTimer = setTimeout(function () {
+                            saveTimer = null;
+                            try {
+                                localStorage.setItem(STORAGE_KEY, JSON.stringify(messages));
+                            } catch (e) {
+                                console.warn('Failed to persist guest messages', e);
+                            }
+                        }, 0);
+                    }
+
+                    function deleteMessage(msgOrKey) {
+                        var key = null;
+                        var ts = null;
+                        if (msgOrKey && typeof msgOrKey === 'object') {
+                            key = msgOrKey.key || null;
+                            ts = msgOrKey.ts || null;
+                        } else if (typeof msgOrKey === 'string') {
+                            key = msgOrKey;
+                        }
+
+                        if (useFirebase && key) {
+                            firebaseRef.child(key).remove().then(function() {
+                            }).catch(function (e) {
+                                console.warn('Failed to remove message from Firebase', e);
+                            });
+                            return;
+                        }
+
+                        if (ts) {
+                            for (var i = 0; i < messages.length; i++) {
+                                if (messages[i].ts === ts) {
+                                    messages.splice(i, 1);
+                                    break;
+                                }
+                            }
+                        }
+                        persist();
+                        var selector = key ? '[data-key="' + key + '"]' : '[data-ts="' + ts + '"]';
+                        var node = list.querySelector(selector);
+                        if (node) node.remove();
+                    }
+
+                    form.addEventListener('submit', function (ev) {
+                        if (isEditing) {
+                            ev.preventDefault();
+                            ev.stopPropagation();
+                            return;
+                        }
+                        ev.preventDefault();
+                        var text = textarea.value.trim();
+                        if (!text) return;
+
+                        var msg = { text: text, ts: Date.now(), sessionId: sessionId };
+
+                        if (useFirebase && firebaseRef) {
+                            try {
+                                var newRef = firebaseRef.push();
+                                newRef.set({ text: msg.text, ts: msg.ts, sessionId: msg.sessionId }).then(function () {
+                                }).catch(function (e) {
+                                    console.warn('Failed to write message to Firebase, falling back to localStorage', e);
+                                    msg.key = newRef.key;
+                                    messages.push(msg);
+                                    appendMessage(msg);
+                                    persist();
+                                });
+                            } catch (e) {
+                                console.error('[guest-messages] firebase push threw', e);
+                                messages.push(msg);
+                                appendMessage(msg);
+                                persist();
+                            }
+                        } else {
+                            messages.push(msg);
+                            appendMessage(msg);
+                            persist();
+                        }
+
+                        textarea.value = '';
+                        textarea.focus();
+                    });
+
+                    textarea.addEventListener('keydown', function (ev) {
+                        if ((ev.ctrlKey || ev.metaKey) && ev.key === 'Enter') {
+                            ev.preventDefault();
+                            form.dispatchEvent(new Event('submit', { cancelable: true }));
+                        }
+                    });
+                })();
+            </script>
+        </main>
+
+</body>
+</html>
