@@ -58,7 +58,7 @@
                 </div>
                 <!-- ==================== SECTION 3: MESSAGES (from messages.html) ==================== -->
                 <section id="guest-messages" class="rsvp-container">
-                    <h2 class="zh-tagline" id="rsvpHeading" data-zh="給新人的珍摯祝福" data-en="Heartfelt wishes for the newlyweds">給新人的珍摯祝福</h2>
+                    <h2 class="zh-tagline" id="rsvpHeading" data-zh="給新人的珍摯祝福" data-en="Love Notes for the Couple">給新人的珍摯祝福</h2>
                     <form id="guestForm" class="guest-form" action="#" method="post" novalidate>
                         <textarea id="gmsg" name="message" data-zh-placeholder="寫下您的祝福..." data-en-placeholder="Write your message here..." placeholder="寫下您的祝福..." maxlength="1000" required aria-label="Message for newlyweds"></textarea>
                         <div>
@@ -503,6 +503,9 @@
                         btn.title = toEnglish ? '切換至中文' : 'Switch to English';
                         btn.setAttribute('aria-label', btn.title);
                         if (section) section.classList.toggle('lang-en', toEnglish);
+                        // Also flag <body> so styles can react to English mode
+                        // outside of .zh-section (e.g. the RSVP heading).
+                        document.body.classList.toggle('lang-en', toEnglish);
 
                         // Translate the RSVP / guest-messages section as well
                         if (rsvpHeading) {

@@ -176,6 +176,14 @@ button#send {
   }
 }
 
+/* English RSVP heading ("Love Notes for the Couple"): shrink the font
+   on narrow screens so it renders on a single line. Scoped to English
+   mode (body.lang-en) so the Chinese heading keeps its original size. */
+body.lang-en .rsvp-container h2.zh-tagline {
+  font-size: clamp(0.95rem, 4.2vw, 1.6rem);
+  white-space: nowrap;
+}
+
 .zh-tagline {
   font-size: 1.6rem;
   font-weight: 300;
