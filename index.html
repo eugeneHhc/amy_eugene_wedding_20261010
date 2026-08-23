@@ -37,7 +37,7 @@
             <div class="wrapper">
                 <!-- Page Divider Video -->
                 <div class="page-divider">
-                    <video class="divider-video" src="video/logo.mp4" autoplay loop muted playsinline aria-hidden="true"></video>
+                    <video class="divider-video" src="video/logo.mp4" poster="photos/pd2_2_transparent.png" preload="auto" autoplay loop muted playsinline aria-hidden="true"></video>
                 </div>
 
                 <div class="invitation-card">
@@ -109,6 +109,16 @@
                                 sidebar.classList.toggle('nav-open');
                             });
                         }
+
+                        // Some browsers pause autoplaying videos on their (blank)
+                        // first frame until interaction. Retry playback so the
+                        // divider/header videos always start.
+                        document.querySelectorAll('video[autoplay]').forEach(function(v) {
+                            var attempt = v.play();
+                            if (attempt && attempt.catch) {
+                                attempt.catch(function() { /* autoplay blocked; poster stays visible */ });
+                            }
+                        });
                     });
                 })();
                 (function() {
