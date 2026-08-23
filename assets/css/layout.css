@@ -87,6 +87,17 @@
   display: block;
 }
 
+/* Logo videos must scale cleanly to any device screen resolution:
+   never exceed their container width and always preserve aspect
+   ratio inside their fixed circular frame. */
+video.brand-mark,
+video.card-header-logo,
+video.zh-section-logo {
+  max-width: 100%;
+  height: auto;
+  object-fit: contain;
+}
+
 .sidebar-brand .brand-name {
   font-family: var(--font-serif-en, 'Cormorant Garamond', serif);
   font-size: 1.15rem;
