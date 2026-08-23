@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Video Loading Diagnostic — video/logo.mp4</title>
+<style>
+  body { font-family: Consolas, 'Courier New', monospace; background: #1e1e28; color: #d4d4dc; padding: 1.5rem; max-width: 860px; margin: 0 auto; }
+  h1 { font-size: 1.2rem; color: #ffd580; }
+  h2 { font-size: 1rem; color: #9cdcfe; margin-top: 1.5rem; }
+  table { border-collapse: collapse; width: 100%; font-size: 0.85rem; }
+  td, th { border: 1px solid #3c3c4a; padding: 6px 10px; text-align: left; vertical-align: top; }
+  th { background: #2a2a35; }
+  .PASS { color: #4ec96e; font-weight: bold; }
+  .FAIL { color: #ff6b6b; font-weight: bold; }
+  .WARN { color: #ffd580; font-weight: bold; }
+  .PENDING { color: #8888a0; }
+  .SKIP { color: #8888a0; }
+  video { max-width: 320px; border: 1px solid #3c3c4a; display: block; margin-top: 0.5rem; }
+  code { color: #ce9178; }
+  #summary { margin-top: 1rem; padding: 0.75rem; border: 1px solid #3c3c4a; background: #2a2a35; white-space: pre-wrap; }
+</style>
+</head>
+<body>
+<h1>Video Loading Diagnostic — <code>video/logo.mp4</code></h1>
+<p>Open this page from the same folder as <code>index.html</code> (same origin, same protocol).
+Each test below reports the exact step where loading fails.</p>
+
+<h2>Test results</h2>
+<table id="results">
+  <tr><th>Test</th><th>Status</th><th>Details</th></tr>
+</table>
+
+<h2>Live playback attempt (visible)</h2>
+<video id="testVideo" src="video/logo.mp4" muted playsinline controls></video>
+
+<div id="summary">Running…</div>
+
+<script>
+(function () {
+  'use strict';
+
+  var SRC = 'video/logo.mp4';
+  var table = document.getElementById('results');
+  var summary = document.getElementById('summary');
+  var lines = [];
+
+  function row(name, status, details) {
+    var tr = document.createElement('tr');
+    var td1 = document.createElement('td'); td1.textContent = name;
+    var td2 = document.createElement('td'); td2.textContent = status; td2.className = status;
+    var td3 = document.createElement('td'); td3.textContent = details || '';
+    tr.appendChild(td1); tr.appendChild(td2); tr.appendChild(td3);
+    table.appendChild(tr);
+    lines.push('[' + status + '] ' + name + (details ? ' — ' + details : ''));
+    console.log('[' + status + '] ' + name, details || '');
+  }
+
+  function updateSummary() {
+    summary.textContent = lines.join('\n');
+  }
+
+  // ---- Test 1: Is the file reachable over HTTP/file? -----------------------
+  fetch(SRC, { cache: 'no-store' })
+    .then(function (res) {
+      var ok = res.ok;
+      row('T1 fetch() file reachable', ok ? 'PASS' : 'FAIL',
+          'HTTP ' + res.status + ' ' + res.statusText +
+          ' | type: ' + res.headers.get('content-type') +
+          ' | length: ' + res.headers.get('content-length') +
+          ' | url: ' + res.url);
+      return ok ? res.arrayBuffer() : null;
+    })
+    .then(function (buf) {
+      if (!buf) {
+        row('T2 MP4 header check', 'SKIP', 'file not fetched');
+        row('T3 codec in container', 'SKIP', 'file not fetched');
+        runElementTests();
+        return;
+      }
+      // ---- Test 2: First bytes are a valid ftyp MP4 header -----------------
+      var bytes = new Uint8Array(buf, 0, Math.min(12, buf.byteLength));
+      var magic = '';
+      for (var i = 4; i < bytes.length; i++) magic += String.fromCharCode(bytes[i]);
+      row('T2 MP4 header check', magic.indexOf('ftyp') === 0 ? 'PASS' : 'FAIL',
+          'first bytes: ' + magic + ' | size: ' + buf.byteLength + ' bytes');
+
+      // ---- Test 3: Codec present in the container --------------------------
+      var head = new Uint8Array(buf, 0, Math.min(8192, buf.byteLength));
+      var s = '';
+      for (var j = 0; j < head.length; j++) s += String.fromCharCode(head[j]);
+      var codec = s.indexOf('avc1') >= 0 || s.indexOf('avc3') >= 0 ? 'H.264 (avc1/avc3)'
+                : s.indexOf('hvc1') >= 0 || s.indexOf('hev1') >= 0 ? 'H.265/HEVC (hvc1/hev1) — unsupported in many browsers!'
+                : 'unknown';
+      row('T3 codec in container', codec.indexOf('H.264') === 0 ? 'PASS' : 'WARN', codec);
+      runElementTests();
+    })
+    .catch(function (err) {
+      row('T1 fetch() file reachable', 'FAIL',
+          err.name + ': ' + err.message +
+          ' → the server/path cannot serve the file at all (check folder name, deployment, or serve via a local server instead of file://)');
+      row('T2 MP4 header check', 'SKIP', 'file not fetched');
+      row('T3 codec in container', 'SKIP', 'file not fetched');
+      runElementTests();
+    });
+
+  // ---- Tests 4-6: real <video> element lifecycle ---------------------------
+  function runElementTests() {
+    var v = document.getElementById('testVideo');
+    var t4done = false, t5done = false, t6done = false;
+
+    var timeout = setTimeout(function () {
+      if (!t4done) row('T4 metadata loaded (loadedmetadata)', 'FAIL',
+          'timeout after 10s | networkState=' + v.networkState + ' readyState=' + v.readyState +
+          ' | networkState 3 = NETWORK_NO_SOURCE (path/404 problem)');
+      if (!t5done) row('T5 first frame decoded (loadeddata)', 'FAIL', 'timeout');
+      if (!t6done) row('T6 play() starts playback', 'FAIL', 'timeout');
+      updateSummary();
+    }, 10000);
+
+    v.addEventListener('loadedmetadata', function () {
+      t4done = true;
+      row('T4 metadata loaded (loadedmetadata)', 'PASS',
+          v.videoWidth + 'x' + v.videoHeight + 'px, ' + v.duration.toFixed(2) + 's');
+      updateSummary();
+    });
+    v.addEventListener('loadeddata', function () {
+      t5done = true;
+      row('T5 first frame decoded (loadeddata)', 'PASS', 'first frame available');
+      updateSummary();
+    });
+    v.addEventListener('canplay', function () {
+      if (t6done) return;
+      var p = v.play();
+      if (p && p.catch) {
+        p.then(function () {
+          t6done = true;
+          row('T6 play() starts playback', 'PASS', 'video is playing');
+          clearTimeout(timeout);
+          updateSummary();
+        }).catch(function (err) {
+          t6done = true;
+          row('T6 play() starts playback', 'FAIL',
+              err.name + ': ' + err.message + ' → autoplay blocked; press play on the video above to confirm it works after user interaction');
+          clearTimeout(timeout);
+          updateSummary();
+        });
+      }
+    });
+    v.addEventListener('error', function () {
+      var codes = { 1: 'MEDIA_ERR_ABORTED', 2: 'MEDIA_ERR_NETWORK (download failed mid-stream)',
+                    3: 'MEDIA_ERR_DECODE (file downloaded but cannot be decoded)',
+                    4: 'MEDIA_ERR_SRC_NOT_SUPPORTED (file not found or format unsupported)' };
+      var e = v.error;
+      row('T4 metadata loaded (loadedmetadata)', t4done ? 'PASS' : 'FAIL',
+          t4done ? 'ok' : (e ? codes[e.code] : 'unknown error'));
+      row('T5 first frame decoded (loadeddata)', 'FAIL', 'error event fired');
+      clearTimeout(timeout);
+      updateSummary();
+    });
+
+    row('T4 metadata loaded (loadedmetadata)', 'PENDING', 'loading…');
+    v.load();
+  }
+
+</script>
+</body>
+</html>
