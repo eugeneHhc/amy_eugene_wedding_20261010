@@ -8,6 +8,15 @@
     
     <title>Messages | Amy & Eugene</title>
     <link rel="stylesheet" href="assets/css/styles.css">
+    <style>
+        /* Keep "Love Notes for the Couple" on a single line at all screen
+           widths: shrink fluidly on narrow screens, cap at 1.6rem on desktop
+           (same treatment as the English heading on notification.html). */
+        .rsvp-container h2.zh-tagline {
+            font-size: clamp(0.95rem, 4.2vw, 1.6rem);
+            white-space: nowrap;
+        }
+    </style>
     <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=Montserrat:wght@400;500;600&family=Noto+Serif+TC:wght@400;600&display=swap" rel="stylesheet">
@@ -35,8 +44,7 @@
 
             <div class="wrapper">
                 <section id="guest-messages" class="rsvp-container">
-                    <h2>Leave your congratulations</h2>
-                    <p class="lead">Share a short message for the newlyweds<br>your kind words will be treasured.</p>
+                    <h2 class="zh-tagline">Love Notes for the Couple</h2>
 
                     <form id="guestForm" class="guest-form" action="#" method="post" novalidate>
                         <textarea id="gmsg" name="message" placeholder="Write your message here..." maxlength="1000" required aria-label="Message for newlyweds"></textarea>
