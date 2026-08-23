@@ -492,7 +492,10 @@ body:has(dialog[open]) .wrapper {
 }
 
 .zh-highlights-list li {
-  font-size: 1.5rem;
+  /* clamp() shrinks the text on narrow screens so each of the 5 items
+     stays on a single line and never overflows .zh-highlights' boundary
+     (icons flank each item and scale with the font via 0.9em). */
+  font-size: clamp(0.85rem, 4vw, 1.15rem);
   padding-left: 0;
   white-space: nowrap;
 }
