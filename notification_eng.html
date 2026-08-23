@@ -21,20 +21,9 @@
                 </div>
 
                 <div class="zh-section">
-                    <!-- Language switch: top-right corner of the section -->
-                    <button class="lang-switch" id="langSwitch" type="button" aria-label="Switch language / 切換語言" title="Switch to English">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true">
-                            <circle cx="12" cy="12" r="9"></circle>
-                            <path d="M3 12h18M12 3c2.5 2.6 3.8 5.7 3.8 9s-1.3 6.4-3.8 9c-2.5-2.6-3.8-5.7-3.8-9S9.5 5.6 12 3z"></path>
-                        </svg>
-                        <span id="langSwitchLabel">EN</span>
-                    </button>
-
                     <img class="zh-section-logo" src="photos/transparent_logo.png" alt="Amy & Eugene Wedding Logo">
 
-                    <p class="zh-invite-text" id="inviteText"
-                       data-zh="我們將於 2026 年 10 月 10 日步入婚姻殿堂&lt;br/&gt;攜手開啟人生新篇章&lt;br/&gt;特此分享這份喜悅&lt;br/&gt;衷心祝願大家平安幸福。"
-                       data-en="We are delighted to announce&#10;that we will be joined in marriage&#10;on 10th October, 2026.&lt;br/&gt;&#10;As we begin this new chapter of&#10;our lives hand in hand, we share&#10;this joy with you and wish you&#10;peace and happiness.">
+                    <p class="zh-invite-text">
                         我們將於 2026 年 10 月 10 日步入婚姻殿堂<br/>攜手開啟人生新篇章<br/>特此分享這份喜悅<br/>衷心祝願大家平安幸福。
                     </p>
 
@@ -58,11 +47,11 @@
                 </div>
                 <!-- ==================== SECTION 3: MESSAGES (from messages.html) ==================== -->
                 <section id="guest-messages" class="rsvp-container">
-                    <h2 class="zh-tagline" id="rsvpHeading" data-zh="給新人的珍摯祝福" data-en="Heartfelt wishes for the newlyweds">給新人的珍摯祝福</h2>
+                    <h2 class="zh-tagline">給新人的珍摯祝福</h2>
                     <form id="guestForm" class="guest-form" action="#" method="post" novalidate>
-                        <textarea id="gmsg" name="message" data-zh-placeholder="寫下您的祝福..." data-en-placeholder="Write your message here..." placeholder="寫下您的祝福..." maxlength="1000" required aria-label="Message for newlyweds"></textarea>
+                        <textarea id="gmsg" name="message" placeholder="寫下您的祝福..." maxlength="1000" required aria-label="Message for newlyweds"></textarea>
                         <div>
-                            <button id="send" type="submit" data-zh="送出" data-en="Submit">送出</button>
+                            <button id="send" type="submit">送出</button>
                         </div>
                     </form>
 
@@ -477,48 +466,6 @@
                             ev.preventDefault();
                             form.dispatchEvent(new Event('submit', { cancelable: true }));
                         }
-                    });
-                })();
-            </script>
-
-            <!-- Language switch for .zh-section -->
-            <script>
-                (function () {
-                    var btn = document.getElementById('langSwitch');
-                    var label = document.getElementById('langSwitchLabel');
-                    var textEl = document.getElementById('inviteText');
-                    if (!btn || !label || !textEl) return;
-
-                    var section = btn.closest('.zh-section');
-                    var rsvpHeading = document.getElementById('rsvpHeading');
-                    var gmsg = document.getElementById('gmsg');
-                    var sendBtn = document.getElementById('send');
-                    var current = 'zh'; // page loads in Traditional Chinese
-
-                    function render() {
-                        var toEnglish = current === 'en';
-                        textEl.innerHTML = textEl.getAttribute(toEnglish ? 'data-en' : 'data-zh');
-                        // Button always shows the language you can switch TO
-                        label.textContent = toEnglish ? '中' : 'EN';
-                        btn.title = toEnglish ? '切換至中文' : 'Switch to English';
-                        btn.setAttribute('aria-label', btn.title);
-                        if (section) section.classList.toggle('lang-en', toEnglish);
-
-                        // Translate the RSVP / guest-messages section as well
-                        if (rsvpHeading) {
-                            rsvpHeading.textContent = rsvpHeading.getAttribute(toEnglish ? 'data-en' : 'data-zh');
-                        }
-                        if (gmsg) {
-                            gmsg.placeholder = gmsg.getAttribute(toEnglish ? 'data-en-placeholder' : 'data-zh-placeholder');
-                        }
-                        if (sendBtn) {
-                            sendBtn.textContent = sendBtn.getAttribute(toEnglish ? 'data-en' : 'data-zh');
-                        }
-                    }
-
-                    btn.addEventListener('click', function () {
-                        current = (current === 'zh') ? 'en' : 'zh';
-                        render();
                     });
                 })();
             </script>

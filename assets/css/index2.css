@@ -7,6 +7,8 @@
 .zh-section {
   font-size: 1.3rem;
   margin-top: 0;
+  /* Anchor for the absolutely-positioned language-switch button */
+  position: relative;
   /* Tighten the top padding so the logo sits right near the top
      edge of the section while still remaining inside its boundary
      (overrides 3.5rem desktop / 2rem mobile base paddings). */
@@ -119,6 +121,59 @@ button#send {
   margin: 0 auto 1.5rem;
   position: relative;
   z-index: 2;
+}
+
+/* ===== Language Switch Button =====
+   Pinned to the upper-right corner of .zh-section. Shows "EN" while
+   the section is in Chinese, and "中" once switched to English. */
+.lang-switch {
+  position: absolute;
+  top: 0.75rem;
+  right: 0.75rem;
+  z-index: 3;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.4rem 0.75rem;
+  border-radius: 999px;
+  border: 1px solid rgba(61, 46, 28, 0.25);
+  background: rgba(255, 255, 255, 0.85);
+  color: #4A3222;
+  font-family: var(--font-serif-zh);
+  font-size: 0.95rem;
+  font-weight: 600;
+  line-height: 1;
+  cursor: pointer;
+  box-shadow: 0 2px 8px rgba(47, 66, 89, 0.08);
+  transition: background 0.2s ease, transform 0.2s ease;
+}
+
+.lang-switch:hover,
+.lang-switch:focus-visible {
+  background: #ffffff;
+  transform: translateY(-1px);
+}
+
+.lang-switch svg {
+  width: 1.1em;
+  height: 1.1em;
+}
+
+/* When the section is switched to English, render the Latin text with
+   the site's serif display face instead of the Chinese serif. */
+.zh-section.lang-en .zh-invite-text {
+  font-family: 'Cormorant Garamond', Georgia, serif;
+  letter-spacing: 0.02em;
+}
+
+/* On phone-sized screens, honour the soft newlines (&#10;) embedded in
+   the English text so it breaks exactly like the reference layout for
+   that resolution. On larger screens the text flows naturally instead,
+   so no ragged hard-broken lines appear on desktop. */
+@media (max-width: 480px) {
+  .zh-section.lang-en .zh-invite-text {
+    white-space: pre-line;
+  }
 }
 
 .zh-tagline {
