@@ -199,11 +199,45 @@ body.lang-en .zh-invite-text {
   }
 }
 
-/* English strings are longer than the Chinese ones: let highlight
-   list items wrap instead of overflowing (the nowrap rule is only
-   safe for the short Chinese labels). */
+/* ===== English mode font sizes: reuse index.html's =====
+   The enlarged sizes above are tuned for short Chinese strings.
+   Long English strings at those sizes overflow the section on
+   narrow screens (the nowrap venue link alone forces the details
+   grid wider than the card), so in English mode fall back to the
+   same sizes index.html uses. */
+body.lang-en .zh-section {
+  font-size: 1rem;
+}
+
+body.lang-en .zh-invite-text {
+  font-size: 1rem;
+}
+
+body.lang-en .zh-details-item {
+  font-size: 0.95rem;
+}
+
+body.lang-en .venue-link {
+  /* index.html sets no explicit size: inherit 0.95rem from the
+     details item instead of index2's enlarged 1.25rem. */
+  font-size: inherit;
+}
+
 body.lang-en .zh-highlights-list li {
+  /* Let highlight items wrap (the nowrap rule is only safe for the
+     short Chinese labels) and use index.html's clamp size. */
   white-space: normal;
+  font-size: clamp(0.85rem, 4vw, 1.15rem);
+}
+
+body.lang-en .countdown-label--zh {
+  font-family: inherit;
+  font-size: 0.95rem;
+  font-weight: 400;
+}
+
+body.lang-en .countdown-value {
+  font-size: clamp(2rem, 4vw, 2.8rem);
 }
 
 /* English RSVP heading ("Love Notes for the Couple"): shrink the font
