@@ -23,8 +23,13 @@
   padding-top: 0.75rem;
 }
 
-/* Remove top and bottom spacing for index2 page */
+/* Remove top and bottom spacing for index2 page; also make the
+   wrapper the positioning context for the language-switch button
+   pinned to its top-right corner. (Harmless on notification.html,
+   whose own lang-switch still anchors to the positioned .zh-section
+   it lives inside.) */
 .main-content .wrapper {
+  position: relative;
   padding-top: 0;
   padding-bottom: 0;
 }
@@ -182,6 +187,28 @@ button#send {
   .zh-section.lang-en .zh-invite-text {
     white-space: pre-line;
   }
+}
+
+/* index2.html pins its lang-switch to .wrapper (outside .zh-section),
+   so its English mode is driven by body.lang-en — mirror the
+   .zh-section.lang-en rules above. Also applies on notification.html,
+   which toggles body.lang-en as well. */
+body.lang-en .zh-invite-text {
+  font-family: 'Cormorant Garamond', Georgia, serif;
+  letter-spacing: 0.02em;
+}
+
+@media (max-width: 480px) {
+  body.lang-en .zh-invite-text {
+    white-space: pre-line;
+  }
+}
+
+/* English strings are longer than the Chinese ones: let highlight
+   list items wrap instead of overflowing (the nowrap rule is only
+   safe for the short Chinese labels). */
+body.lang-en .zh-highlights-list li {
+  white-space: normal;
 }
 
 /* English RSVP heading ("Love Notes for the Couple"): shrink the font

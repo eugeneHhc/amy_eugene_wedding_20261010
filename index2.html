@@ -16,6 +16,15 @@
 <body>
     <main class="main-content">
             <div class="wrapper">
+                <!-- Language switch: top-right corner of the wrapper -->
+                <button class="lang-switch" id="langSwitch" type="button" aria-label="Switch language / 切換語言" title="Switch to English">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true">
+                        <circle cx="12" cy="12" r="9"></circle>
+                        <path d="M3 12h18M12 3c2.5 2.6 3.8 5.7 3.8 9s-1.3 6.4-3.8 9c-2.5-2.6-3.8-5.7-3.8-9S9.5 5.6 12 3z"></path>
+                    </svg>
+                    <span id="langSwitchLabel">EN</span>
+                </button>
+
                 <div class="page-divider">
                     <img src="photos/pd2_2_transparent.png" alt="Wedding moment" class="divider-image" loading="lazy">
                 </div>
@@ -30,7 +39,9 @@
                 </div>
 
                 <div class="zh-section">
-                    <p class="zh-invite-text">
+                    <p class="zh-invite-text"
+                       data-zh="衍雋與迦晞誠意邀請您，&lt;br&gt;一同前來分享我們的喜悅，&lt;br&gt;見證我們互許終身的夢幻時刻。"
+                       data-en="Amy &amp; Eugene cordially invite you&#10;to share in our joy&#10;and witness the moment we say our vows.">
                         衍雋與迦晞誠意邀請您，<br>
                         一同前來分享我們的喜悅，<br>
                         見證我們互許終身的夢幻時刻。
@@ -38,20 +49,20 @@
 
                     <div class="zh-details-list">
                         <div class="zh-details-item">
-                            <span class="zh-details-label">日期：</span>
-                            <span>2026 年 10 月 10 日<br>（星期六）</span>
+                            <span class="zh-details-label" data-zh="日期：" data-en="Date:">日期：</span>
+                            <span data-zh="2026 年 10 月 10 日&lt;br&gt;（星期六）" data-en="Saturday, October 10, 2026">2026 年 10 月 10 日<br>（星期六）</span>
                         </div>
                         <div class="zh-details-item">
-                            <span class="zh-details-label">地點：</span>
-                            <a class="venue-link" href="Map for Hong Kong Disneyland Hotel and Transportation in HKDL Resort_20230107.pdf" target="_blank" rel="noopener noreferrer">香港迪士尼樂園酒店</a>
+                            <span class="zh-details-label" data-zh="地點：" data-en="Venue:">地點：</span>
+                            <a class="venue-link" href="Map for Hong Kong Disneyland Hotel and Transportation in HKDL Resort_20230107.pdf" target="_blank" rel="noopener noreferrer" data-zh="香港迪士尼樂園酒店" data-en="Hong Kong Disneyland Hotel">香港迪士尼樂園酒店</a>
                         </div>
                         <div class="zh-details-item">
-                            <span class="zh-details-label">歡慶酒會:</span>
-                            <span>下午3時(證婚儀式)<br>[ 夢想家花園 ]</span>
+                            <span class="zh-details-label" data-zh="歡慶酒會:" data-en="Cocktail Reception:">歡慶酒會:</span>
+                            <span data-zh="下午3時(證婚儀式)&lt;br&gt;[ 夢想家花園 ]" data-en="Wedding Ceremony, 3:00 PM&lt;br&gt;[ Dreamers' Garden ]">下午3時(證婚儀式)<br>[ 夢想家花園 ]</span>
                         </div>
                         <div class="zh-details-item">
-                            <span class="zh-details-label">晚宴:</span>
-                            <span>晚上6時(入席)<br>晚上6時半(新人進場)<br>[ 白雪公主宴會廳 ]</span>
+                            <span class="zh-details-label" data-zh="晚宴:" data-en="Banquet:">晚宴:</span>
+                            <span data-zh="晚上6時(入席)&lt;br&gt;晚上6時半(新人進場)&lt;br&gt;[ 白雪公主宴會廳 ]" data-en="6:00 PM (Guest seating)&lt;br&gt;6:30 PM (Entrance of the newlyweds)&lt;br&gt;[ Snow White Ballroom ]">晚上6時(入席)<br>晚上6時半(新人進場)<br>[ 白雪公主宴會廳 ]</span>
                         </div>
                     </div>
                 </div>
@@ -62,13 +73,13 @@
                 </div>
 
                 <div class="zh-highlights">
-                    <h2 class="zh-tagline">歡慶酒會與互動環節</h2>
+                    <h2 class="zh-tagline" data-zh="歡慶酒會與互動環節" data-en="Cocktail Reception &amp; Interactive Sessions">歡慶酒會與互動環節</h2>
                     <ul class="zh-highlights-list">
                         </br>
-                        <li><img class="zh-deco-icon" src="photos/IMG-20260816-WA0003.png" alt="" aria-hidden="true">雞尾酒會小食<img class="zh-deco-icon" src="photos/IMG-20260816-WA0002.png" alt="" aria-hidden="true"></li>
-                        <li><img class="zh-deco-icon" src="photos/IMG-20260816-WA0003.png" alt="" aria-hidden="true">抽獎環節<img class="zh-deco-icon" src="photos/IMG-20260816-WA0002.png" alt="" aria-hidden="true"></li>
-                        <li><img class="zh-deco-icon" src="photos/IMG-20260816-WA0003.png" alt="" aria-hidden="true">與新人合照時段<img class="zh-deco-icon" src="photos/IMG-20260816-WA0002.png" alt="" aria-hidden="true"></li>
-                        <li><img class="zh-deco-icon" src="photos/IMG-20260816-WA0003.png" alt="" aria-hidden="true">與迪士尼角色合照時段<img class="zh-deco-icon" src="photos/IMG-20260816-WA0002.png" alt="" aria-hidden="true"></li>
+                        <li><img class="zh-deco-icon" src="photos/IMG-20260816-WA0003.png" alt="" aria-hidden="true"><span data-zh="雞尾酒會小食" data-en="Cocktail Refreshments">雞尾酒會小食</span><img class="zh-deco-icon" src="photos/IMG-20260816-WA0002.png" alt="" aria-hidden="true"></li>
+                        <li><img class="zh-deco-icon" src="photos/IMG-20260816-WA0003.png" alt="" aria-hidden="true"><span data-zh="抽獎環節" data-en="Lucky Draw">抽獎環節</span><img class="zh-deco-icon" src="photos/IMG-20260816-WA0002.png" alt="" aria-hidden="true"></li>
+                        <li><img class="zh-deco-icon" src="photos/IMG-20260816-WA0003.png" alt="" aria-hidden="true"><span data-zh="與新人合照時段" data-en="Photo Session with the Newlyweds">與新人合照時段</span><img class="zh-deco-icon" src="photos/IMG-20260816-WA0002.png" alt="" aria-hidden="true"></li>
+                        <li><img class="zh-deco-icon" src="photos/IMG-20260816-WA0003.png" alt="" aria-hidden="true"><span data-zh="與迪士尼角色合照時段" data-en="Photo Session with Disney Characters">與迪士尼角色合照時段</span><img class="zh-deco-icon" src="photos/IMG-20260816-WA0002.png" alt="" aria-hidden="true"></li>
                     </ul>
                 </div>
 
@@ -78,9 +89,8 @@
                 </div>
 
                 <div id="countdown" class="countdown-box" aria-live="polite">
-                    <p class="countdown-label countdown-label--zh">距離慶典還有</p>
-                    <p class="countdown-value"><span id="countdown-days">0</span> 天</p>
-                </div>
+                    <p class="countdown-label countdown-label--zh" data-zh="距離慶典還有" data-en="Days until the celebration">距離慶典還有</p>
+                    <p class="countdown-value"><span id="countdown-days">0</span> <span data-zh="天" data-en="days">天</span></p>
                 </div>
                 
                 <!-- Page Divider Image -->
@@ -101,11 +111,11 @@
                 </div>
                 <!-- ==================== SECTION 3: MESSAGES (from messages.html) ==================== -->
                 <section id="guest-messages" class="rsvp-container">
-                    <h2 class="zh-tagline">給新人的珍摯祝福</h2>
+                    <h2 class="zh-tagline" data-zh="給新人的珍摯祝福" data-en="Love Notes for the Couple">給新人的珍摯祝福</h2>
                     <form id="guestForm" class="guest-form" action="#" method="post" novalidate>
-                        <textarea id="gmsg" name="message" placeholder="寫下您的祝福..." maxlength="1000" required aria-label="Message for newlyweds"></textarea>
+                        <textarea id="gmsg" name="message" placeholder="寫下您的祝福..." data-zh-placeholder="寫下您的祝福..." data-en-placeholder="Write your message here..." maxlength="1000" required aria-label="Message for newlyweds"></textarea>
                         <div>
-                            <button id="send" type="submit">送出</button>
+                            <button id="send" type="submit" data-zh="送出" data-en="Submit">送出</button>
                         </div>
                     </form>
 
@@ -531,6 +541,46 @@
                             ev.preventDefault();
                             form.dispatchEvent(new Event('submit', { cancelable: true }));
                         }
+                    });
+                })();
+            </script>
+
+            <!-- Language switch for the whole page (same behaviour as
+                 notification.html, but generic: every element carrying
+                 data-zh / data-en is swapped, and body.lang-en drives
+                 the CSS font/spacing adjustments) -->
+            <script>
+                (function () {
+                    var btn = document.getElementById('langSwitch');
+                    var label = document.getElementById('langSwitchLabel');
+                    if (!btn || !label) return;
+
+                    var current = 'zh'; // page loads in Traditional Chinese
+
+                    function render() {
+                        var toEnglish = current === 'en';
+
+                        // Swap every element that carries data-zh / data-en
+                        document.querySelectorAll('[data-zh]').forEach(function (el) {
+                            var html = el.getAttribute(toEnglish ? 'data-en' : 'data-zh');
+                            if (html !== null) el.innerHTML = html;
+                        });
+                        document.querySelectorAll('[data-zh-placeholder]').forEach(function (el) {
+                            var ph = el.getAttribute(toEnglish ? 'data-en-placeholder' : 'data-zh-placeholder');
+                            if (ph !== null) el.placeholder = ph;
+                        });
+
+                        // Button always shows the language you can switch TO
+                        label.textContent = toEnglish ? '中' : 'EN';
+                        btn.title = toEnglish ? '切換至中文' : 'Switch to English';
+                        btn.setAttribute('aria-label', btn.title);
+                        // Flag <body> so styles can react to English mode
+                        document.body.classList.toggle('lang-en', toEnglish);
+                    }
+
+                    btn.addEventListener('click', function () {
+                        current = (current === 'zh') ? 'en' : 'zh';
+                        render();
                     });
                 })();
             </script>
