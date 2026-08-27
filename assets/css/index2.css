@@ -210,7 +210,9 @@ body.lang-en .zh-section {
 }
 
 body.lang-en .zh-invite-text {
-  font-size: 1rem;
+  /* Match the size of <span class="zh-details-label"> (inherits
+     0.95rem from .zh-details-item in English mode). */
+  font-size: 1.3rem;
 }
 
 body.lang-en .zh-details-item {
