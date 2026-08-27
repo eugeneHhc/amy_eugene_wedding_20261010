@@ -9,9 +9,17 @@
   margin-top: 0;
   /* Anchor for the absolutely-positioned language-switch button */
   position: relative;
-  /* Tighten the top padding so the logo sits right near the top
-     edge of the section while still remaining inside its boundary
-     (overrides 3.5rem desktop / 2rem mobile base paddings). */
+  /* No top-padding override: fall back to the base paddings (3.5rem
+     desktop / 2rem mobile). index2.html now places its divider video
+     OUTSIDE the section (like index.html does for the invitation
+     card), so the old tightened padding — added only to keep the
+     small logo video near the top edge — is no longer needed here. */
+}
+
+/* The tightened top padding still applies to sections that DO embed
+   the small logo video (notification.html), keeping its logo right
+   near the top edge of the section. */
+.zh-section:has(.zh-section-logo) {
   padding-top: 0.75rem;
 }
 

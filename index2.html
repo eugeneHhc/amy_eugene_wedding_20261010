@@ -16,12 +16,16 @@
 <body>
     <main class="main-content">
             <div class="wrapper">
-                <div class="zh-section">
-                    <!-- Page Divider Video (same layout & logic as index.html) -->
-                    <div class="page-divider">
-                        <video class="divider-video" src="video/logo.mp4?v=2" poster="photos/pd2_2_transparent.png" preload="auto" autoplay loop muted playsinline aria-hidden="true"></video>
-                    </div>
+                <!-- Page Divider Video (same layout & logic as index.html).
+                     Kept OUTSIDE .zh-section — like index.html, which places
+                     this divider above the invitation card — so the video's
+                     height no longer pushes the section's text past the
+                     fixed aspect-ratio background boundary. -->
+                <div class="page-divider">
+                    <video class="divider-video" src="video/logo.mp4?v=2" poster="photos/pd2_2_transparent.png" preload="auto" autoplay loop muted playsinline aria-hidden="true"></video>
+                </div>
 
+                <div class="zh-section">
                     <p class="zh-invite-text">
                         衍雋與迦晞誠意邀請您，<br>
                         一同前來分享我們的喜悅，<br>
