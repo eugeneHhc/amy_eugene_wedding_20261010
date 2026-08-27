@@ -17,7 +17,10 @@
     <main class="main-content">
             <div class="wrapper">
                 <div class="zh-section">
-                    <video class="zh-section-logo" src="video/logo.mp4?v=2" poster="photos/transparent_logo.png" autoplay loop muted playsinline aria-label="Amy & Eugene Wedding Logo"></video>
+                    <!-- Page Divider Video (same layout & logic as index.html) -->
+                    <div class="page-divider">
+                        <video class="divider-video" src="video/logo.mp4?v=2" poster="photos/pd2_2_transparent.png" preload="auto" autoplay loop muted playsinline aria-hidden="true"></video>
+                    </div>
 
                     <p class="zh-invite-text">
                         衍雋與迦晞誠意邀請您，<br>
@@ -104,6 +107,19 @@
 
             </div>
 
+            <script>
+                // Some browsers pause autoplaying videos on their (blank)
+                // first frame until interaction. Retry playback so the
+                // divider videos always start (same logic as index.html).
+                document.addEventListener('DOMContentLoaded', function() {
+                    document.querySelectorAll('video[autoplay]').forEach(function(v) {
+                        var attempt = v.play();
+                        if (attempt && attempt.catch) {
+                            attempt.catch(function() { /* autoplay blocked; poster stays visible */ });
+                        }
+                    });
+                });
+            </script>
             <script>
                 (function() {
                     var countdownEl = document.getElementById('countdown-days');
