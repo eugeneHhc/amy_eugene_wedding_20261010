@@ -348,3 +348,63 @@ body.lang-en .rsvp-container h2.zh-tagline {
   vertical-align: middle;
   margin: 0 0.3em;
 }
+
+
+/* === Minimal responsive aspect-ratio + scaling fixes (added) === */
+
+/* 1) Constrain the zh-section to a responsive card with an aspect ratio */
+.zh-section {
+  width: min(100%, 920px);        /* limit grown width on large screens */
+  margin-left: auto;
+  margin-right: auto;
+  aspect-ratio: 4 / 5;           /* card-like aspect; tweak 4/5 → 3/4 etc. if you prefer */
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: clamp(1rem, 3.5vw, 3.5rem); /* keep current spacing but responsive */
+  box-sizing: border-box;
+  overflow: hidden;              /* prevents overflow when text/images slightly overshoot */
+}
+
+/* 2) On narrow screens allow natural height (so text can grow) */
+@media (max-width: 680px) {
+  .zh-section {
+    aspect-ratio: auto;
+    width: 100%;
+    padding: 2rem 0.5rem;
+  }
+}
+
+/* 3) Ensure divider video / images and gallery scale cleanly and preserve aspect */
+.page-divider img.divider-image,
+.page-divider video.divider-video,
+.gallery-img {
+  width: 100%;
+  max-width: 100%;
+  height: auto;
+  display: block;
+  object-fit: cover;
+}
+
+/* 4) Make invite text scale smoothly to viewport */
+.zh-invite-text {
+  font-size: clamp(1rem, 1.6vw, 1.3rem);
+  line-height: 1.25;
+  text-align: center;
+  max-width: 90%;
+  word-break: break-word;
+}
+
+/* Keep language-switch anchored inside the constrained card */
+.zh-section .lang-switch {
+  right: 1rem;
+  top: 1rem;
+}
+
+/* Optional: reduce very large detail item sizes on very wide screens */
+@media (min-width: 1200px) {
+  .zh-details-item, .zh-highlights-list li {
+    font-size: clamp(0.95rem, 1.1vw, 1.25rem);
+  }
+}
