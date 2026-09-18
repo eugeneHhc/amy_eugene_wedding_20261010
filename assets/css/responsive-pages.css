@@ -7,10 +7,33 @@
  * the page structure or the gallery/message scripts.
  */
 
-/* Keep every page component inside the available viewport width. */
+/* Prevent layout overflow on all screen sizes. */
+.page-layout,
 .main-content,
 .main-content .wrapper,
 .main-content .page-divider {
+  min-width: 0;
+}
+
+.page-layout {
+  display: flex;
+  width: 100%;
+}
+
+.page-layout > .sidebar {
+  flex: 0 0 220px;
+}
+
+.page-layout > .page-divider {
+  flex: 1 1 auto;
+  width: calc(100% - 220px);
+  max-width: calc(100% - 220px);
+  margin: 0;
+}
+
+.page-layout > .main-content {
+  flex: 1 1 auto;
+  width: 0;
   min-width: 0;
 }
 
@@ -128,6 +151,22 @@ button#send {
 }
 
 @media (max-width: 680px) {
+  .page-layout {
+    flex-direction: column;
+  }
+
+  .page-layout > .sidebar {
+    flex-basis: auto;
+    width: 100%;
+  }
+
+  .page-layout > .page-divider,
+  .page-layout > .main-content {
+    width: 100%;
+    max-width: 100%;
+    flex-basis: auto;
+  }
+
   .main-content .wrapper {
     padding-inline: 0.25rem;
   }
