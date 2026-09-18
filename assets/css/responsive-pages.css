@@ -1,13 +1,8 @@
 /*
  * Responsive refinements for the standalone pages.
- *
- * index2.html has its own responsive layer and is intentionally not changed.
- * These selectors target the legacy page components used by index.html,
- * photos.html, and messages.html so their content scales without changing
- * the page structure or the gallery/message scripts.
+ * index2.html is intentionally not changed.
  */
 
-/* Prevent layout overflow on all screen sizes. */
 .page-layout,
 .main-content,
 .main-content .wrapper,
@@ -43,7 +38,6 @@
   padding-inline: clamp(0.75rem, 4vw, 2rem);
 }
 
-/* Home invitation card: fluid spacing and type instead of fixed desktop sizes. */
 .invitation-card {
   width: min(100%, 680px);
   padding: clamp(1.5rem, 5vw, 2.5rem) clamp(0.9rem, 5vw, 2.5rem) clamp(2rem, 7vw, 3.5rem);
@@ -82,7 +76,6 @@
   overflow-wrap: anywhere;
 }
 
-/* Home highlights and countdown use the same fluid card behaviour. */
 .zh-highlights,
 .countdown-box {
   width: min(100%, 680px);
@@ -98,20 +91,6 @@
   overflow-wrap: break-word;
 }
 
-.zh-highlights-list .zh-deco-icon {
-  max-width: 0.9em;
-}
-
-.countdown-box {
-  padding-inline: clamp(0.75rem, 5vw, 1rem);
-}
-
-.countdown-label {
-  font-size: clamp(0.72rem, 3vw, 0.95rem);
-  white-space: normal;
-}
-
-/* Photos page: preserve the 4:5 frame while allowing it to shrink fluidly. */
 .gallery-grid {
   width: 100%;
   max-width: 680px;
@@ -123,7 +102,6 @@
   max-width: 560px;
 }
 
-/* Guestbook: make the card, controls, and messages fit narrow phones. */
 .rsvp-container {
   width: 100%;
   max-width: 680px;
@@ -197,9 +175,5 @@ button#send {
 
   .invitation-card .zh-details-label {
     margin-top: 0.45rem;
-  }
-
-  .invitation-card .zh-details-item > *:last-child {
-    padding-left: 0;
   }
 }
