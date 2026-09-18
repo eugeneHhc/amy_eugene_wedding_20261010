@@ -1,0 +1,166 @@
+/*
+ * Responsive refinements for the standalone pages.
+ *
+ * index2.html has its own responsive layer and is intentionally not changed.
+ * These selectors target the legacy page components used by index.html,
+ * photos.html, and messages.html so their content scales without changing
+ * the page structure or the gallery/message scripts.
+ */
+
+/* Keep every page component inside the available viewport width. */
+.main-content,
+.main-content .wrapper,
+.main-content .page-divider {
+  min-width: 0;
+}
+
+.main-content .wrapper {
+  width: 100%;
+  max-width: 1000px;
+  padding-inline: clamp(0.75rem, 4vw, 2rem);
+}
+
+/* Home invitation card: fluid spacing and type instead of fixed desktop sizes. */
+.invitation-card {
+  width: min(100%, 680px);
+  padding: clamp(1.5rem, 5vw, 2.5rem) clamp(0.9rem, 5vw, 2.5rem) clamp(2rem, 7vw, 3.5rem);
+}
+
+.invitation-card .tagline {
+  font-size: clamp(1rem, 3.8vw, 1.5rem);
+  line-height: 1.25;
+  white-space: normal;
+}
+
+.invitation-card .invite-text {
+  font-size: clamp(0.9rem, 2.2vw, 1rem);
+  line-height: 1.65;
+  margin-bottom: clamp(1.75rem, 6vw, 3.5rem);
+}
+
+.invitation-card .zh-details-list {
+  grid-template-columns: minmax(max-content, 34%) minmax(0, 1fr);
+  gap: clamp(0.65rem, 2.5vw, 1.75rem) clamp(0.7rem, 3vw, 1.5rem);
+}
+
+.invitation-card .zh-details-item {
+  min-width: 0;
+  font-size: clamp(0.78rem, 2.25vw, 0.95rem);
+}
+
+.invitation-card .zh-details-item > *:last-child {
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+
+.invitation-card .venue-link {
+  max-width: 100%;
+  white-space: normal;
+  overflow-wrap: anywhere;
+}
+
+/* Home highlights and countdown use the same fluid card behaviour. */
+.zh-highlights,
+.countdown-box {
+  width: min(100%, 680px);
+}
+
+.zh-highlights {
+  padding-inline: clamp(0.75rem, 5vw, 2.5rem);
+}
+
+.zh-highlights-list li {
+  font-size: clamp(0.78rem, 3.8vw, 1.15rem);
+  white-space: normal;
+  overflow-wrap: break-word;
+}
+
+.zh-highlights-list .zh-deco-icon {
+  max-width: 0.9em;
+}
+
+.countdown-box {
+  padding-inline: clamp(0.75rem, 5vw, 1rem);
+}
+
+.countdown-label {
+  font-size: clamp(0.72rem, 3vw, 0.95rem);
+  white-space: normal;
+}
+
+/* Photos page: preserve the 4:5 frame while allowing it to shrink fluidly. */
+.gallery-grid {
+  width: 100%;
+  max-width: 680px;
+}
+
+.gallery-grid .photo-frame,
+.photo-frame--single {
+  width: 100%;
+  max-width: 560px;
+}
+
+/* Guestbook: make the card, controls, and messages fit narrow phones. */
+.rsvp-container {
+  width: 100%;
+  max-width: 680px;
+  padding: clamp(1rem, 5vw, 1.75rem);
+}
+
+.rsvp-container h2 {
+  font-size: clamp(1rem, 5vw, 1.6rem);
+  line-height: 1.25;
+}
+
+textarea#gmsg {
+  min-height: clamp(150px, 35vw, 220px);
+  font-size: clamp(0.9rem, 2.5vw, 1rem);
+}
+
+button#send {
+  max-width: 100%;
+  padding-inline: clamp(0.9rem, 4vw, 1.125rem);
+}
+
+.message {
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+
+@media (max-width: 680px) {
+  .main-content .wrapper {
+    padding-inline: 0.25rem;
+  }
+
+  .main-content > .page-divider,
+  .main-content .wrapper > .page-divider {
+    margin-inline: 0.25rem;
+  }
+
+  .invitation-card,
+  .zh-highlights,
+  .countdown-box,
+  .gallery-grid,
+  .rsvp-container {
+    border-radius: 12px;
+  }
+
+  .invitation-card .zh-details-list {
+    grid-template-columns: minmax(max-content, 31%) minmax(0, 1fr);
+  }
+}
+
+@media (max-width: 380px) {
+  .invitation-card .zh-details-list {
+    grid-template-columns: 1fr;
+    gap: 0.15rem;
+  }
+
+  .invitation-card .zh-details-label {
+    margin-top: 0.45rem;
+  }
+
+  .invitation-card .zh-details-item > *:last-child {
+    padding-left: 0;
+  }
+}
